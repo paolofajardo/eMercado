@@ -188,3 +188,22 @@ a.custom-card:hover {
 .checked {
   color: orange;
 }
+
+#inicio {
+  background-color: #212529;
+  color: #83807b;
+  text-align: center;
+}
+
+#boton {
+  background-color: #212529;
+  border: black;
+  color: #83807b;
+}
+
+.divcentrar {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: 10px;
+}
