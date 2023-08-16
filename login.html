@@ -17,23 +17,35 @@
 </head>
 
 <body>
-  <h1 class="site-header" id="inicio">Bienvenido</h1>
+  <h1 class="site-header py-3" id="inicio">Bienvenido</h1>
   <div class="divcentrar">
     <img src="img/login.png" alt="Login image" height="300px">
   </div>
-  <main class=>
-    <div class="signin">
-      <div class="form-group" role="alert">
-        <label for="usuario" class="form-control">usuario:
-          <input type="text" name="user" class="form-control" id="user" required></label>
-        <label for="contraseña" class="form-control">contraseña:
-          <input type="text" name="password" class="form-control" id="password" required></label>
-        <input type="checkbox" id="checkbox"> recordar usuario
-        <div class="divcentrar">
-          <br> <button id="boton" class="btn btn-primary">Enviar</button>
+  <main>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+              <div class="form-group py-2">
+                <label for="user">Usuario:</label>
+                <input type="text" name="user" id="user" class="form-control" required>
+              </div>
+              <div class="form-group py-2">
+                <label for="password">Contraseña:</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+              </div>
+              <div class="form-group py-1">
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox">Recordar usuario</label>
+              </div>
+              <div class="divcentrar">
+                <button id="boton" class="btn btn-primary px-5 py-2">Enviar</button>
+              </div>
+          </div>
         </div>
       </div>
-    </div>
   </main>
   <footer class="text-muted">
     <div class="container">
@@ -46,5 +58,4 @@
   </footer>
   <script src="js/login.js"></script>
 </body>
-
 </html>
