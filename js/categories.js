@@ -69,6 +69,7 @@ function showCategoriesList(){
 
         document.getElementById("cat-list-container").innerHTML = htmlContentToAppend;
     }
+    
 }
 
 function sortAndShowCategories(sortCriteria, categoriesArray){
