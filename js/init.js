@@ -39,3 +39,15 @@ let getJSONData = function(url){
         return result;
     });
 }
+
+function verificarAutenticacion() {
+  // Verifica si el usuario está logeado
+  if (!localStorage.getItem("usuario") && !sessionStorage.getItem("usuario")) {
+  // Si no lo está, redirige al login
+    window.location.href = "login.html";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+verificarAutenticacion();
+});

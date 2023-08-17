@@ -15,6 +15,6 @@ document.getElementById('boton').addEventListener('click', function () {
     if (checkbox.checked) {
         localStorage.setItem("usuario", JSON.stringify(usuario));
     } else {
-        localStorage.removeItem('informacionUsuario');
+        sessionStorage.setItem("usuario", JSON.stringify(usuario));
     }
 });
