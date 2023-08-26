@@ -1,6 +1,8 @@
 let currentProductsArray = [];
 let catID = JSON.parse(localStorage.getItem("catID")); // Obteniendo catID de localStorage
 let urlCAT = PRODUCTS_URL + catID + EXT_TYPE; // Generando URL concatenando variables desde init.js y catID desde localStorage
+let minCount = undefined;
+let maxCount = undefined;
 
 /* 
 Una vez obtenido el urlCAT utilizamos el getJSONData para traer todos los productos del API y los cargamos
@@ -37,6 +39,9 @@ function showProductsList() {
     for (let i = 0; i < currentProductsArray.length; i++) {
         let product = currentProductsArray[i];
 
+        if (((minCount == undefined) || (minCount != undefined && parseInt(product.soldCount) >= minCount)) &&
+            ((maxCount == undefined) || (maxCount != undefined && parseInt(product.soldCount) <= maxCount))){
+
         htmlContentToAppend += `
         <div onclick="setProductID(${product.id})" class="list-group-item list-group-item-action cursor-active">
             <div class="row">
@@ -53,7 +58,71 @@ function showProductsList() {
             </div>
         </div>
         `;
-    }
+        }
     document.getElementById("products-list-container").innerHTML = htmlContentToAppend;
-
+    }
 }
+
+document.getElementById("A-Z").addEventListener('click', () => {
+    result = currentProductsArray.sort(function(a, b) {
+        if ( a.name < b.name ){ return -1; }
+        if ( a.name > b.name ){ return 1; }
+        return 0;
+    });
+    showProductsList()
+    return result;
+});
+
+document.getElementById("Z-A").addEventListener('click', () => {
+    result = currentProductsArray.sort(function(a, b) {
+        if ( a.name > b.name ){ return -1; }
+        if ( a.name < b.name ){ return 1; }
+        return 0;
+    });
+    showProductsList()
+    return result;
+});
+
+document.getElementById("porCantidad").addEventListener('click', () => {
+    result = currentProductsArray.sort(function(a, b) {
+        let aCount = parseInt(a.soldCount);
+        let bCount = parseInt(b.soldCount);
+
+        if ( aCount > bCount ){ return -1; }
+        if ( aCount < bCount ){ return 1; }
+        return 0;
+    });
+    showProductsList()
+    return result;
+});
+
+document.getElementById("filtroRango").addEventListener('click', () => {
+    minCount = document.getElementById("filtroRangoMin").value;
+    maxCount = document.getElementById("filtroRangoMax").value;
+
+    if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0){
+        minCount = parseInt(minCount);
+    }
+    else{
+        minCount = undefined;
+    }
+
+    if ((maxCount != undefined) && (maxCount != "") && (parseInt(maxCount)) >= 0){
+        maxCount = parseInt(maxCount);
+    }
+    else{
+        maxCount = undefined;
+    }
+
+    showProductsList()
+});
+
+document.getElementById("limpiarFiltroRango").addEventListener('click', () => {
+    document.getElementById("filtroRangoMin").value = "";
+    document.getElementById("filtroRangoMax").value = "";
+
+    minCount = undefined;
+    maxCount = undefined;
+
+    showProductsList()
+});
