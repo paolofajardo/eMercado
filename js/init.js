@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 verificarAutenticacion();
 let userName = JSON.parse(localStorage.getItem('usuario'))
 let showUser = document.getElementById('username');
-showUser.innerHTML = userName.nombre;
+showUser.innerHTML = `<i class="fa-regular fa-user no-uppercase" style="padding-right:5px;"></i>${userName.nombre}`;
+
 
 });
