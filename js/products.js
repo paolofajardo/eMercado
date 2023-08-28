@@ -63,20 +63,20 @@ function showProductsList() {
     }
 }
 
-document.getElementById("A-Z").addEventListener('click', () => {
+document.getElementById("MayorAMenor").addEventListener('click', () => {
     result = currentProductsArray.sort(function(a, b) {
-        if ( a.name < b.name ){ return -1; }
-        if ( a.name > b.name ){ return 1; }
+        if ( a.cost < b.cost ){ return -1; }
+        if ( a.cost > b.cost ){ return 1; }
         return 0;
     });
     showProductsList()
     return result;
 });
 
-document.getElementById("Z-A").addEventListener('click', () => {
+document.getElementById("MenorAMayor").addEventListener('click', () => {
     result = currentProductsArray.sort(function(a, b) {
-        if ( a.name > b.name ){ return -1; }
-        if ( a.name < b.name ){ return 1; }
+        if ( a.cost > b.cost ){ return -1; }
+        if ( a.cost < b.cost ){ return 1; }
         return 0;
     });
     showProductsList()
