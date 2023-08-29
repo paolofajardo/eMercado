@@ -1,5 +1,9 @@
 document.getElementById('boton').addEventListener('click', function () {
-
+    let alerta = Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, llene los campos.',
+        })
     let usuario = {}
     usuario.nombre = document.getElementById("user").value;
     usuario.pass = document.getElementById("password").value;
@@ -7,7 +11,7 @@ document.getElementById('boton').addEventListener('click', function () {
     if (usuario.nombre !== "" && usuario.pass !== "") {
         location.href = "index.html";
     } else {
-        alert("Por favor llene los campos");
+        alerta;
     };
 
     let checkbox = document.getElementById('checkbox');
