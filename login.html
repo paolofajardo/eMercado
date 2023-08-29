@@ -9,9 +9,32 @@
   <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="sweetalert2.min.css">
   <style>
     body {
+      background-color: white;
+    }
+    .card-body{
       background-color: rgb(248, 249, 250);
+      transition:all 0.5s ease;
+    }
+    .card-body:hover{
+      transform:scale(1.01);
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    #boton, #inicio{
+      transition:all 0.5s ease;
+      cursor:pointer;
+      
+    }
+    #inicio:hover{
+      color:white;
+    }
+    #boton:hover{
+      color:white;
+      transform: scale(1.05);
+      
     }
   </style>
 </head>
@@ -57,5 +80,7 @@
     </div>
   </footer>
   <script src="js/login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>
