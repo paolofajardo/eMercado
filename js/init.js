@@ -50,9 +50,14 @@ function verificarAutenticacion() {
 
 document.addEventListener("DOMContentLoaded", function () {
 verificarAutenticacion();
-let userName = JSON.parse(localStorage.getItem('usuario'))
-let showUser = document.getElementById('username');
-showUser.innerHTML = `<i class="fa-regular fa-user no-uppercase" style="padding-right:5px;"></i>${userName.nombre}`;
-
+let userName = "";
+if (!localStorage.getItem("usuario")) {
+  userName = JSON.parse(sessionStorage.getItem('usuario'));
+} else {
+  userName = JSON.parse(localStorage.getItem('usuario'));
+}
+let showUser = document.getElementById('email');
+showUser.innerHTML = `<i class="fa-regular fa-user no-uppercase" style="padding-right:5px;"></i>${userName.email}`;
 
 });
+

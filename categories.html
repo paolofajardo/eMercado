@@ -55,34 +55,38 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
-          <div class="row container p-0 m-0">
-            <div class="col">
+      <div class="row pt-2 pb-2">
+        <div class="col-12 col-md-5">
+          <div class="row">
+            <div class="col-8 col-md-8">
               <input class="form-control" type="search" placeholder="Buscar..." id="searchInput">
             </div>
-            <div class="col-auto">
-              <button class="btn btn-primary" id="searchButton">Buscar</button>
+            <div class="col-4 col-md-4">
+              <button class="btn btn-outline-dark" id="searchButton">Buscar</button>
             </div>
           </div>
-          <div class="row container p-0 m-0">
-            <div class="col">
+        </div>
+        <div class="col-12 col-md-7">
+          <div class="row">
+            <div class="col-2 col-md-1">
               <p class="font-weight-normal text-end my-2">Cant.</p>
             </div>
-            <div class="col">
-              <input class="form-control" type="number" placeholder="min." id="rangeFilterCountMin">
+            <div class="col-5 col-md-3">
+              <input class="form-control" min="0" type="number" placeholder="min." id="rangeFilterCountMin">
             </div>
-            <div class="col">
-              <input class="form-control" type="number" placeholder="máx." id="rangeFilterCountMax">
+            <div class="col-5 col-md-3">
+              <input class="form-control" min="0" type="number" placeholder="máx." id="rangeFilterCountMax">
             </div>
-            <div class="col-3 p-0">
+        
+            <div class="col-12 col-md-5">
               <div class="btn-group" role="group">
-                <button class="btn btn-light btn-block" id="rangeFilterCount">Filtrar</button>
-                <button class="btn btn-link btn-sm" id="clearRangeFilter">Limpiar</button>
+                <button class="btn btn-outline-dark" id="rangeFilterCount">Filtrar</button>
+                <button class="btn btn-outline-dark" id="clearRangeFilter">Limpiar</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
       <div class="row">
         <div class="list-group" id="cat-list-container">
         </div>
