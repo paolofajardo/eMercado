@@ -142,3 +142,31 @@ document.addEventListener("DOMContentLoaded", function(e){
         showCategoriesList();
     });
 });
+
+//Campo de Busqueda.
+document.addEventListener('DOMContentLoaded', function() {
+    // Se definen las variables.
+    const search_Input = document.getElementById('searchInput');
+    const categoryList = document.getElementById('cat-list-container');
+
+    // Se agrega un evento al campo de texto (search_Input).
+    search_Input.addEventListener('input', function() {
+
+        // Se definen dos nuevas variables, una para obtener el valor actual y pasarlo a minúsculas,
+        // y la segunda para seleccionar todas las categorías con esa clase en CSS.
+        const searchText = search_Input.value.toLowerCase();
+        const categories = categoryList.querySelectorAll('.list-group-item');
+
+        // Se itera sobre cada elemento y ejecuta la función.
+        categories.forEach(category => {
+            const categoryName = category.querySelector('h4').textContent.toLowerCase();
+            // Se hace una comparación del nombre de la categoría con el cuadro de búsqueda,
+            // si es true, se muestra; si es false, se oculta.
+            if (categoryName.includes(searchText)) {
+                category.style.display = 'block';
+            } else {
+                category.style.display = 'none';
+            }
+        });
+    });
+});
