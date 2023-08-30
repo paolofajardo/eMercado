@@ -1,17 +1,16 @@
 document.getElementById('boton').addEventListener('click', function () {
-    let alerta = Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Por favor, llene los campos.',
-        })
     let usuario = {}
-    usuario.nombre = document.getElementById("user").value;
+    usuario.email = document.getElementById("email").value;
     usuario.pass = document.getElementById("password").value;
 
-    if (usuario.nombre !== "" && usuario.pass !== "") {
+    if (usuario.email !== "" && usuario.pass !== "") {
         location.href = "index.html";
     } else {
-        alerta;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor, llene los campos.',
+        });
     };
 
     let checkbox = document.getElementById('checkbox');
