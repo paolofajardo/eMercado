@@ -126,3 +126,25 @@ document.getElementById("limpiarFiltroRango").addEventListener('click', () => {
 
     showProductsList()
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const search_Input = document.getElementById('searchInput');
+    const productsList = document.getElementById('products-list-container');
+
+    search_Input.addEventListener('input', function() {
+
+        const searchText = search_Input.value.toLowerCase();
+        const products = productsList.querySelectorAll('.list-group-item');
+
+        products.forEach(product => {
+            const productName = product.querySelector('h4').textContent.toLowerCase();
+            
+            if (productName.includes(searchText)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+});
