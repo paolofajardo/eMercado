@@ -43,7 +43,7 @@ function showProductsList() {
             ((maxCount == undefined) || (maxCount != undefined && parseInt(product.cost) <= maxCount))){
 
         htmlContentToAppend += `
-        <div onclick="setProductID(${product.id})" class="list-group-item list-group-item-action cursor-active">
+        <div onclick="setProductID(${product.id})" class="list-group-item list-group-item-action cursor-active" data-description="${product.description}">
             <div class="row">
                 <div class="col-3">
                     <img src="${product.image}" alt="${product.description}" class="img-thumbnail">
@@ -139,8 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         products.forEach(product => {
             const productName = product.querySelector('h4').textContent.toLowerCase();
+            const productDescription = product.getAttribute('data-description').toLowerCase();
             
-            if (productName.includes(searchText)) {
+            if (productName.includes(searchText) || productDescription.includes(searchText)) {
                 product.style.display = 'block';
             } else {
                 product.style.display = 'none';
