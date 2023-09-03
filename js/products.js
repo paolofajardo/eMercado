@@ -139,8 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         products.forEach(product => {
             const productName = product.querySelector('h4').textContent.toLowerCase();
+            const productDescription = product.getAttribute('data-description').toLowerCase();
             
-            if (productName.includes(searchText)) {
+            if (productName.includes(searchText) || productDescription.includes(searchText)) {
                 product.style.display = 'block';
             } else {
                 product.style.display = 'none';
