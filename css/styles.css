@@ -207,3 +207,13 @@ a.custom-card:hover {
   display: flex;
   margin-top: 10px;
 }
+
+.font-small{
+  font-size: 14px !important;
+}
+
+.price-fontstyle{
+  font-family: system-ui;
+  font-weight: 100;
+  font-size: 1.4em;
+}
