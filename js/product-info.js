@@ -1,5 +1,6 @@
 let prodID = JSON.parse(localStorage.getItem("prodID")); // Obteniendo prodID de localStorage
 let urlPROD = PRODUCT_INFO_URL + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
+let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE;// Generando Url concatenando variables para traer los comentarios independientemente por cada id.
 let currentProd;
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -8,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
             currentProd = resultObj.data;
             showProductInfo();
             showImagesHtml();
+            showComments();
         }
     });
 });
@@ -82,3 +84,32 @@ function showImagesHtml() {
 
     document.getElementById("prod-carrousel").innerHTML = htmlImages;
 };
+
+function showComments() {
+    // Realiza una solicitud GET a la URL de los comentarios
+    getJSONData(urlCOMENTS).then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            let comments = resultObj.data;
+
+            // Construye el HTML para mostrar los comentarios
+            let htmlContentToAppend = '<h4>Comentarios</h4>';
+
+            for (let i = 0; i < comments.length; i++) {
+                let comment = comments[i];
+                htmlContentToAppend += `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">${comment.user}</h6>
+                            <p class="card-text">${comment.description}</p>
+                            <small class="text-muted">${comment.dateTime}</small>
+                            <p class="card-text">${comment.score}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Agrega los comentarios al elemento con id "comments-section"
+            document.getElementById("comments-section").innerHTML = htmlContentToAppend;
+        }
+    });
+}
