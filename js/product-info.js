@@ -96,13 +96,34 @@ function showComments() {
 
             for (let i = 0; i < comments.length; i++) {
                 let comment = comments[i];
+
+                // Calcula la cantidad de estrellas llenas y vacías según el puntaje
+                let checkedStars = Math.floor(comment.score);
+                let emptyStars = 5 - checkedStars;
+
+                // Crea un contenedor para las estrellas
+                let starContenedor = '<div class="stars-container">';
+
+                // Agrega las estrellas llenas
+                for (let i = 0; i < checkedStars; i++) {
+                    starContenedor += '<span class="fa fa-star checked"></span>';
+                }
+
+                // Agrega las estrellas vacías
+                for (let i = 0; i < emptyStars; i++) {
+                    starContenedor += '<span class="fa fa-star"></span>';
+                }
+
+                // Cierra el contenedor de estrellas
+                starContenedor += '</div>';
+
                 htmlContentToAppend += `
                     <div class="card mb-3">
                         <div class="card-body">
                             <h6 class="card-title">${comment.user}</h6>
-                            <p class="card-text">${comment.description}</p>
+                            ${starContenedor}
                             <small class="text-muted">${comment.dateTime}</small>
-                            <p class="card-text">${comment.score}</p>
+                            <p class="card-text">${comment.description}</p>
                         </div>
                     </div>
                 `;
