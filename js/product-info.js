@@ -143,7 +143,7 @@ let htmlContentToAppend = ''
 //    let starContenedor = '<div class="stars-container">';
 //    let emptyStars = 5 - checkedStars;
 
-let newUser = JSON.parse(localStorage.getItem('usuario'))
+let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
 const newDateTime = new Date().toISOString()
 const newDescription = document.getElementById('comment-product').value;
 let starRate = document.getElementById('rate-star').value;
