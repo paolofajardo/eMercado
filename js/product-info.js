@@ -134,3 +134,44 @@ function showComments() {
         }
     });
 }
+
+document.getElementById('btn-comment').addEventListener('click', function () {
+
+let htmlContentToAppend = ''
+    
+//    let checkedStars = Math.floor(newStarContenedor);
+//    let starContenedor = '<div class="stars-container">';
+//    let emptyStars = 5 - checkedStars;
+
+let newUser = JSON.parse(localStorage.getItem('usuario'))
+const newDateTime = new Date().toISOString()
+const newDescription = document.getElementById('comment-product').value;
+let starRate = document.getElementById('rate-star').value;
+let starContainer = '<div class="stars-container">';
+let checkedStars = Math.floor(starRate);
+let emptyStars = 5 - checkedStars;
+
+    // Agrega las estrellas llenas
+    for (let i = 0; i < checkedStars; i++) {
+        starContainer += '<span class="fa fa-star checked"></span>';
+    }
+    // Agrega las estrellas vacías
+    for (let i = 0; i < emptyStars; i++) {
+        starContainer += '<span class="fa fa-star"></span>';
+    }
+    // Cierra el contenedor de estrellas
+    starContainer += '</div>';
+
+    htmlContentToAppend += `
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-title">${newUser.email}</h6>
+            ${starContainer}
+            <small class="text-muted">${newDateTime}</small>
+            <p class="card-text">${newDescription}</p>
+        </div>
+    </div>
+`;
+
+    document.getElementById('comments-section-new').innerHTML += htmlContentToAppend;
+});
