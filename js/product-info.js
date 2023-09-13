@@ -135,33 +135,34 @@ function showComments() {
     });
 }
 
+
+// Se le da funcionalidad al boton para sumar el comentario
 document.getElementById('btn-comment').addEventListener('click', function () {
 
+// Construye el HTML para mostrar los comentarios
 let htmlContentToAppend = ''
-    
-//    let checkedStars = Math.floor(newStarContenedor);
-//    let starContenedor = '<div class="stars-container">';
-//    let emptyStars = 5 - checkedStars;
 
+// Se toman los valores necesarios para la construccion del comentario 
 let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
 const newDateTime = new Date().toISOString()
 const newDescription = document.getElementById('comment-product').value;
 let starRate = document.getElementById('rate-star').value;
+
+//Repetimos el codigo de la funcion showComments() para mostrar las estrellas
 let starContainer = '<div class="stars-container">';
 let checkedStars = Math.floor(starRate);
 let emptyStars = 5 - checkedStars;
 
-    // Agrega las estrellas llenas
     for (let i = 0; i < checkedStars; i++) {
         starContainer += '<span class="fa fa-star checked"></span>';
     }
-    // Agrega las estrellas vacías
+    
     for (let i = 0; i < emptyStars; i++) {
         starContainer += '<span class="fa fa-star"></span>';
     }
-    // Cierra el contenedor de estrellas
+    
     starContainer += '</div>';
-
+     //Creamos el contenido del comentario dentro del documento HTML
     htmlContentToAppend += `
     <div class="card mb-3">
         <div class="card-body">
