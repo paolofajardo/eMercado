@@ -124,8 +124,6 @@ function showComments() {
                             ${starContenedor}
                             <small class="text-muted">${comment.dateTime}</small>
                             <p class="card-text">${comment.description}</p>
-                            
-                            
                         </div>
                     </div>
                 `;
