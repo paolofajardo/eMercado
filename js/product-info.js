@@ -142,8 +142,17 @@ let htmlContentToAppend = ''
 //    let checkedStars = Math.floor(newStarContenedor);
 //    let starContenedor = '<div class="stars-container">';
 //    let emptyStars = 5 - checkedStars;
-
-let newUser = JSON.parse(localStorage.getItem('usuario'))
+function getUser() {
+    let user = '';
+    let usuario = localStorage.getItem('usuario');
+    if (usuario !== null && usuario !== "") {
+      user = JSON.parse(usuario);
+    } else {
+      user = JSON.parse(sessionStorage.getItem('usuario'));
+    }
+    return user;
+  }
+let newUser = getUser()
 const newDateTime = new Date().toISOString()
 const newDescription = document.getElementById('comment-product').value;
 let starRate = document.getElementById('rate-star').value;
