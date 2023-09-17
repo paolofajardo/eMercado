@@ -175,4 +175,6 @@ let emptyStars = 5 - checkedStars;
 `;
 
     document.getElementById('comments-section-new').innerHTML += htmlContentToAppend;
+    document.getElementById('comment-product').value = ""
+    document.getElementById('rate-star').value = "0"
 });
