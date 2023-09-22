@@ -58,6 +58,30 @@ if (!localStorage.getItem("usuario")) {
 }
 let showUser = document.getElementById('email');
 showUser.innerHTML = `<i class="fa-regular fa-user no-uppercase" style="padding-right:5px;"></i>${userName.email}`;
+document.getElementById('logout').addEventListener('click', () => {
+  let swalScript = document.createElement('script');
+  swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+  document.body.appendChild(swalScript);
+  
+  swalScript.onload = function() {
+    Swal.fire({
+      title: 'Cerrar sesión',
+      text: '¿Estás seguro de que deseas cerrar sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('usuario') || sessionStorage.removeItem('usuario');
+        location.href = 'login.html';
+      }
+    });
+  };
+});
+
 
 });
 
