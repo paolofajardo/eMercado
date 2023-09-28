@@ -115,7 +115,7 @@ const modoNocheGuardado = localStorage.getItem('modoNoche');
 // Aplicar el modo nocturno si está activo
 if (modoNocheGuardado === 'true') {
     document.documentElement.setAttribute('tema', 'dark');
-    // Asegúrate de que el interruptor esté marcado
+    // Asegurar de que el interruptor esté marcado
     colorSwitch.checked = true;
 }
 
