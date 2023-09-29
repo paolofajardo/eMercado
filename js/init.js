@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Se crea el contenido HTML del dropdown menu 
   document.getElementById('dropmenu').innerHTML = `<div class="dropdown">
                                                  <button class="btn btn-secondary dropdown-toggle nav-link" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="emailMenu">
-                                                   <i class="fa-regular fa-user no-uppercase" style="padding-right:5px;"></i>${userName.email}
+                                                 <img class="userIcon" src="icons/user-regular.svg" alt="Usuario"></i>${userName.email}
                                                  </button>
                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                      <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
