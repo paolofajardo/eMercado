@@ -121,5 +121,3 @@ if (modoNocheGuardado === 'true') {
 
 colorSwitch.addEventListener('change', cambiaTema);
 });
-
-
