@@ -101,9 +101,25 @@ document.addEventListener("DOMContentLoaded", function () {
   function cambiaTema(ev){
       if(ev.target.checked){
           document.documentElement.setAttribute('tema', 'dark');
+      // Guardar la preferencia en localStorage cuando se active el modo oscuro
+          localStorage.setItem('modoNoche', 'true');
       } else {
           document.documentElement.setAttribute('tema', 'light');
+          // Guardar la preferencia en localStorage cuando se desactive el modo oscuro
+          localStorage.setItem('modoNoche', 'false');
       }
   }
-  colorSwitch.addEventListener('change', cambiaTema);
+  // Verificar la preferencia almacenada en localStorage
+const modoNocheGuardado = localStorage.getItem('modoNoche');
+
+// Aplicar el modo nocturno si está activo
+if (modoNocheGuardado === 'true') {
+    document.documentElement.setAttribute('tema', 'dark');
+    // Asegurar de que el interruptor esté marcado
+    colorSwitch.checked = true;
+}
+
+colorSwitch.addEventListener('change', cambiaTema);
 });
+
+
