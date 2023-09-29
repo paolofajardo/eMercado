@@ -250,6 +250,13 @@ body {
 }
 
 
+.userIcon{
+  width: 25px;
+  height: 25px;
+  padding: 2px;
+}
+
+
 .list-group-item,
 .carousel {
   background-color:var(--color-fondo);
