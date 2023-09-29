@@ -243,6 +243,12 @@ body {
   background-color:var(--color-fondo);
   color:var(--color-fuente) 
 }
+.userIcon{
+  width: 25px;
+  height: 25px;
+  padding: 2px;
+}
+
 
 .list-group-item,
 .carousel {
