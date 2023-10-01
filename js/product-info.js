@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         if (resultObj.status === "ok") {
             currentProd = resultObj.data;
             showProductInfo(); // Muestra la información del producto actual en el HTML
-            showImagesHtml(); // Corresponde al carrusel de imagenes del procuto actual
+            showImagesHtml(); // Corresponde al carrusel de imagenes del producto actual
             showComments(); 
             getRelatedProducts(); //Obtiene los productos relacionados 
         }
