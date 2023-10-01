@@ -1,20 +1,20 @@
 let prodID = JSON.parse(localStorage.getItem("prodID")); // Obteniendo prodID de localStorage
 let prodCAT = JSON.parse(localStorage.getItem("catID")); // Obteniendo catID de localStorage
-let urlPRODUCTS = PRODUCTS_URL + prodCAT + EXT_TYPE;// Generando URL concatenando variables desde init.js y catID desde localStorage
+let urlPRODUCTS = PRODUCTS_URL + prodCAT + EXT_TYPE; // Generando URL concatenando variables desde init.js y catID desde localStorage
 let urlPROD = PRODUCT_INFO_URL+ + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
-let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE;// Generando Url concatenando variables para traer los comentarios independientemente por cada id.
-let currentProd; 
-let relatedProducts;//Se declaró la variable que almacena la información del producto relacionado
+let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE; // Generando Url concatenando variables para traer los comentarios independientemente por cada id.
+let currentProd; //Se declara la variable que almacena la información del producto mostrado actualmente en la página
+let relatedProducts; //Se declara la variable que almacena la información de los productos relacionados
 
 
 document.addEventListener("DOMContentLoaded", function (e) {
     getJSONData(urlPROD).then(function (resultObj) {
         if (resultObj.status === "ok") {
             currentProd = resultObj.data;
-            showProductInfo(currentProd);//Ahora las funciones que muestran la info y el carrusel admiten parametros
-            showImagesHtml(currentProd);// para mostrar el producto actual o el producto relacionado que clickeemos
-            showComments();
-            getRelatedProducts();//Obtiene los productos relacionados 
+            showProductInfo(); // Muestra la información del producto actual en el HTML
+            showImagesHtml(); // Corresponde al carrusel de imagenes del producto actual
+            showComments(); 
+            getRelatedProducts(); //Obtiene los productos relacionados 
         }
     });
 });
@@ -24,16 +24,13 @@ function getRelatedProducts() {
         if (resultObj.status === "ok") {
             let categoryData = resultObj.data;
 
-            
             if ('products' in categoryData) { // Verifica si la propiedad 'products' existe en el objeto
-                // Obtenemos solo los productos de la misma categoría
-                let products = categoryData.products;
+               
+                let products = categoryData.products; // Obtenemos solo los productos de la misma categoría
 
-                // Evita que se muestre el producto actual entre los relacionados
-                relatedProducts = products.filter(product => product.id !== currentProd.id);
+                relatedProducts = products.filter(product => product.id !== currentProd.id); // Evita que se muestre el producto actual entre los relacionados
 
-                // Muestra las cards de productos relacionados
-                showRelatedProducts(relatedProducts);
+                showRelatedProducts(relatedProducts); // Muestra las cards de productos relacionados
             }
         }
     });
@@ -69,61 +66,39 @@ function showRelatedProducts(relatedProducts) {
 
     document.getElementById("related-products").innerHTML = htmlRelatedProducts;
 
-    // Agrega un evento de clic a las tarjetas de productos relacionados
-    let productCards = document.querySelectorAll('#related-products .card');
+ 
+    let productCards = document.querySelectorAll('#related-products .card'); // Agrega un evento de clic a las tarjetas de productos relacionados
 
     productCards.forEach(card => {
         card.addEventListener('click', function () {
-            // Obtiene el ID del producto relacionado seleccionado
-            let selectedProductID = parseInt(card.getAttribute('data-product-id'));
 
-            // Redirige al usuario a la página del producto relacionado
-            redirectToProduct(selectedProductID);
+            let selectedProductID = parseInt(card.getAttribute('data-product-id')); // Obtiene el ID del producto relacionado seleccionado
+            
+            redirectToProduct(selectedProductID); // Redirige al usuario a la página del producto relacionado
         });
     });
 }
+
 function redirectToProduct(productID) {
-    // Almacena el ID del producto seleccionado en localStorage
-    localStorage.setItem("prodID", productID);
     
-    // Redirige al usuario a la página de detalles del producto
-    window.location.href = "product-info.html";
+    localStorage.setItem("prodID", productID); // Almacena el ID del producto seleccionado en localStorage
+    
+    window.location.href = "product-info.html"; // Redirige al usuario a la página de detalles del producto
 }
 
 
-document.addEventListener("DOMContentLoaded", function (e) {
-    let productCards = document.querySelectorAll('#related-products .card');
 
-    productCards.forEach(card => {
-        card.addEventListener('click', function () {
-            // Obtén el ID del producto relacionado seleccionado
-            let selectedProductID = parseInt(card.getAttribute('data-product-id'));
-
-            // Encuentra el objeto completo del producto seleccionado en la lista de productos relacionados
-            let selectedProduct = relatedProducts.find(product => product.id === selectedProductID);
-
-            // Asegúrate de que se haya encontrado el producto antes de actualizar la página
-            if (selectedProduct) {
-                // Actualizar la página con la información del nuevo producto
-                showProductInfo(selectedProduct);
-                showImagesHtml(selectedProduct);
-            }
-        });
-    });
-});
-
-
-function showProductInfo(productShowed) {
+function showProductInfo() {
     let htmlContentToAppend = "";
 
     htmlContentToAppend += `
-            <div><h4>${productShowed.name}</h4></div>
+            <div><h4>${currentProd.name}</h4></div>
             <div class="input-group mb-3 align-items-center">
-              <div class="price-fontstyle">${productShowed.currency}&nbsp;${productShowed.cost}</div>
-              <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${productShowed.soldCount} vendidos</span>
+              <div class="price-fontstyle">${currentProd.currency}&nbsp;${currentProd.cost}</div>
+              <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${currentProd.soldCount} vendidos</span>
             </div>
             <div class="fs-6 pt-1 pb-3">
-                <h6><strong>Descripción</strong></h5>${productShowed.description}
+                <h6><strong>Descripción</strong></h5>${currentProd.description}
             </div>
             <div class="col-12">
                 <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
@@ -134,13 +109,13 @@ function showProductInfo(productShowed) {
     document.getElementById("prod-info").innerHTML = htmlContentToAppend;
 };
 
-function showImagesHtml(productShowed) {
+function showImagesHtml() {
     let htmlImages = `
     <div id="ProductCarousel" class="carousel carousel-dark slide img-thumbnail" data-bs-ride="carousel">
         <div class="carousel-indicators">
         `;
 
-    for (let i = 0; i < productShowed.images.length; i++) {
+    for (let i = 0; i < currentProd.images.length; i++) {
         if (i === 0) {
 
             htmlImages += '<button type="button" data-bs-target="#ProductCarousel" data-bs-slide-to="' + i + '" class="active" aria-current="true" aria-label="Slide ' + i + '"></button>';
@@ -152,16 +127,16 @@ function showImagesHtml(productShowed) {
     htmlImages += '</div>' + 
         '<div class="carousel-inner">';
 
-    for (let i = 0; i < productShowed.images.length; i++) {
+    for (let i = 0; i < currentProd.images.length; i++) {
         if (i === 0) {
             htmlImages += `
             <div class="carousel-item active" data-bs-interval="10000">
-            <img class="d-block w-100" src="${productShowed.images[i]}" alt="${productShowed.id + '-' + i}" ></img></div>
+            <img class="d-block w-100" src="${currentProd.images[i]}" alt="${currentProd.id + '-' + i}" ></img></div>
             `;
         } else {
             htmlImages += `
             <div class="carousel-item" data-bs-interval="2000">
-            <img class="d-block w-100" src="${productShowed.images[i]}" alt="${productShowed.id + '-' + i}" ></img></div>
+            <img class="d-block w-100" src="${currentProd.images[i]}" alt="${currentProd.id + '-' + i}" ></img></div>
             `;
         }
     }
@@ -182,37 +157,35 @@ function showImagesHtml(productShowed) {
     document.getElementById("prod-carrousel").innerHTML = htmlImages;
 };
 
+
+
 function showComments() {
-    // Realiza una solicitud GET a la URL de los comentarios
-    getJSONData(urlCOMENTS).then(function (resultObj) {
+
+    getJSONData(urlCOMENTS).then(function (resultObj) { // Realiza una solicitud GET a la URL de los comentarios
         if (resultObj.status === "ok") {
             let comments = resultObj.data;
 
-            // Construye el HTML para mostrar los comentarios
-            let htmlContentToAppend = '<h4>Comentarios</h4>';
+         
+            let htmlContentToAppend = '<h4>Comentarios</h4>'; // Construye el HTML para mostrar los comentarios
 
             for (let i = 0; i < comments.length; i++) {
                 let comment = comments[i];
 
-                // Calcula la cantidad de estrellas llenas y vacías según el puntaje
-                let checkedStars = Math.floor(comment.score);
+              
+                let checkedStars = Math.floor(comment.score); // Calcula la cantidad de estrellas llenas y vacías según el puntaje
                 let emptyStars = 5 - checkedStars;
 
-                // Crea un contenedor para las estrellas
-                let starContenedor = '<div class="stars-container">';
+                let starContenedor = '<div class="stars-container">'; // Crea un contenedor para las estrellas
 
-                // Agrega las estrellas llenas
-                for (let i = 0; i < checkedStars; i++) {
+                for (let i = 0; i < checkedStars; i++) { // Agrega las estrellas llenas
                     starContenedor += '<span class="fa fa-star checked"></span>';
                 }
 
-                // Agrega las estrellas vacías
-                for (let i = 0; i < emptyStars; i++) {
+                for (let i = 0; i < emptyStars; i++) { // Agrega las estrellas vacías
                     starContenedor += '<span class="fa fa-star"></span>';
                 }
-
-                // Cierra el contenedor de estrellas
-                starContenedor += '</div>';
+      
+                starContenedor += '</div>'; // Cierra el contenedor de estrellas
 
                 htmlContentToAppend += `
                     <div class="card mb-3">
@@ -226,18 +199,15 @@ function showComments() {
                 `;
             }
 
-            // Agrega los comentarios al elemento con id "comments-section"
-            document.getElementById("comments-section").innerHTML = htmlContentToAppend;
+            document.getElementById("comments-section").innerHTML = htmlContentToAppend; // Agrega los comentarios al elemento con id "comments-section"
         }
     });
 }
 
 
-// Se le da funcionalidad al boton para sumar el comentario
-document.getElementById('btn-comment').addEventListener('click', function () {
+document.getElementById('btn-comment').addEventListener('click', function () { // Se le da funcionalidad al boton para sumar el comentario
 
-// Construye el HTML para mostrar los comentarios
-let htmlContentToAppend = ''
+let htmlContentToAppend = '' // Construye el HTML para mostrar los comentarios
 
 // Se toman los valores necesarios para la construccion del comentario 
 let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
