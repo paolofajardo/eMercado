@@ -46,7 +46,7 @@ nav a {
   height: 50vh;
   padding: 5em inherit;
   margin-bottom: 0;
-  background: url('../img/peugeotCover.png');
+  background:transparent;
   background-size: cover;
   background-repeat: no-repeat;
   color: black;
