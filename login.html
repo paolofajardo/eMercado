@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>eMercado - Todo lo que busques está aquí</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <link rel="stylesheet" href="sweetalert2.min.css">
+  <style>
+    body {
+      background-color: white;
+    }
+    .card-body{
+      background-color: rgb(248, 249, 250);
+      transition:all 0.5s ease;
+    }
+    .card-body:hover{
+      transform:scale(1.01);
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    #boton, #inicio{
+      transition:all 0.5s ease;
+      cursor:pointer;
+      
+    }
+    #inicio:hover{
+      color:white;
+    }
+    #boton:hover{
+      color:white;
+      transform: scale(1.05);
+      
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="site-header py-3" id="inicio">Bienvenido</h1>
+  <div class="divcentrar">
+    <img src="img/login.png" alt="Login image" height="300px">
+  </div>
+  <main>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+              <div class="form-group py-2">
+                <label for="email">Usuario:</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+              </div>
+              <div class="form-group py-2">
+                <label for="password">Contraseña:</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+              </div>
+              <div class="form-group py-1">
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox">Recordar usuario</label>
+              </div>
+              <div class="divcentrar">
+                <button id="boton" class="btn btn-primary px-5 py-2">Enviar</button>
+              </div>
+          </div>
+        </div>
+      </div>
+  </main>
+  <footer class="text-muted">
+    <div class="container">
+      <p class="float-end">
+        <a href="#">Volver arriba</a>
+      </p>
+      <p>Este sitio forma parte de <a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a Programar</a>
+      </p>
+    </div>
+  </footer>
+  <script src="js/login.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>
