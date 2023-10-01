@@ -13,6 +13,20 @@ nav a {
   text-decoration: none;
 }
 
+/* CSS para el Carrosel de inicio */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/* Termina CSS Carrosel de inicio 
+.album{
+  margin-top: 800px;
+}*/
+
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
@@ -32,10 +46,8 @@ nav a {
   height: 50vh;
   padding: 5em inherit;
   margin-bottom: 0;
-  background-color: #53C0FB;
-  background: url('../img/cover_back.png');
+  background: url('../img/peugeotCover.png');
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
   color: black;
   font-weight: bold;
@@ -58,7 +70,7 @@ nav a {
 
 .jumbotron .container {
   max-width: 40rem;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color:transparent;
   border-radius: 10px;
   text-shadow: 1px 1px 2px grey;
 }
