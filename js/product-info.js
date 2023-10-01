@@ -1,32 +1,104 @@
 let prodID = JSON.parse(localStorage.getItem("prodID")); // Obteniendo prodID de localStorage
+let prodCAT = JSON.parse(localStorage.getItem("catID")); // Obteniendo catID de localStorage
+let urlPRODUCTS = PRODUCTS_URL + prodCAT + EXT_TYPE;// Generando URL concatenando variables desde init.js y catID desde localStorage
 let urlPROD = PRODUCT_INFO_URL + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
 let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE;// Generando Url concatenando variables para traer los comentarios independientemente por cada id.
-let currentProd;
+let currentProd; 
+let relatedProducts;//Se declaró la variable que almacena la información del producto relacionado
 
 document.addEventListener("DOMContentLoaded", function (e) {
     getJSONData(urlPROD).then(function (resultObj) {
         if (resultObj.status === "ok") {
             currentProd = resultObj.data;
-            showProductInfo();
-            showImagesHtml();
+            showProductInfo(currentProd);//Ahora las funciones que muestran la info y el carrusel admiten parametros
+            showImagesHtml(currentProd);// para mostrar el producto actual o el producto relacionado que clickeemos
             showComments();
+            getRelatedProducts();//Obtiene los productos relacionados 
         }
     });
 });
 
+function getRelatedProducts() {
+    getJSONData(urlPRODUCTS).then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            let categoryData = resultObj.data;
+
+            // Verifica si la propiedad 'products' existe en el objeto
+            if ('products' in categoryData) {
+                // Obtenemos solo los productos de la misma categoría
+                let products = categoryData.products;
+
+                // Evita que se muestre el producto actual entre los relacionados
+                relatedProducts = products.filter(product => product.id !== currentProd.id);
+
+                // Muestra las cards de productos relacionados
+                showRelatedProducts(relatedProducts);
+            }
+        }
+    });
+}
+
+function showRelatedProducts(relatedProducts) {
+    let htmlRelatedProducts = '<h4>Productos Relacionados</h4><div class="row">';
+
+    // Verifica que haya productos relacionados antes de intentar acceder a ellos
+    if (relatedProducts && relatedProducts.length > 0) {
+        for (let i = 0; i < relatedProducts.length; i++) {  
+            let product = relatedProducts[i];
+
+            // Verifica si 'image' está definido en el producto y genera el HTML correspondiente para mostrar las cards
+            if (product.image) {
+                htmlRelatedProducts += `
+                    <div class="col-md-6" id=cardsDiv>
+                        <div class="card mb-4 box-shadow" data-product-id="${product.id}">
+                            <img class="card-img-top" src="${product.image}" alt="${product.name}">
+                            <div class="card-body">
+                                <p class="card-text">${product.name}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.error(`El producto ${product.name} no tiene imagen definida.`);
+            }
+        }
+
+        htmlRelatedProducts += '</div>';
+    } else {
+        // Si no hay productos relacionados, muestra un mensaje
+        htmlRelatedProducts += '<p>No hay productos relacionados</p>';
+    }
+
+    document.getElementById("related-products").innerHTML = htmlRelatedProducts;
+}
+
+// Evento clic a las cards para actualizar la página con la info del producto seleccionado
+let productCards = document.querySelectorAll('#related-products .card');
+    productCards.forEach(card => {
+        card.addEventListener('click', function () {
+            // Obtener el objeto completo del producto relacionado seleccionado
+            let selectedProduct = parseInt(card.getAttribute('data-product-id'));
+
+            // Actualizar la página con el nuevo producto
+            showProductInfo(selectedProduct);
+            showImagesHtml(selectedProduct);
+        });
+    });
 
 
-function showProductInfo() {
+
+
+function showProductInfo(productShowed) {
     let htmlContentToAppend = "";
 
     htmlContentToAppend += `
-            <div><h4>${currentProd.name}</h4></div>
+            <div><h4>${productShowed.name}</h4></div>
             <div class="input-group mb-3 align-items-center">
-              <div class="price-fontstyle">${currentProd.currency}&nbsp;${currentProd.cost}</div>
-              <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${currentProd.soldCount} vendidos</span>
+              <div class="price-fontstyle">${productShowed.currency}&nbsp;${productShowed.cost}</div>
+              <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${productShowed.soldCount} vendidos</span>
             </div>
             <div class="fs-6 pt-1 pb-3">
-                <h6><strong>Descripción</strong></h5>${currentProd.description}
+                <h6><strong>Descripción</strong></h5>${productShowed.description}
             </div>
             <div class="col-12">
                 <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
@@ -37,13 +109,13 @@ function showProductInfo() {
     document.getElementById("prod-info").innerHTML = htmlContentToAppend;
 };
 
-function showImagesHtml() {
+function showImagesHtml(productShowed) {
     let htmlImages = `
     <div id="ProductCarousel" class="carousel carousel-dark slide img-thumbnail" data-bs-ride="carousel">
         <div class="carousel-indicators">
         `;
 
-    for (let i = 0; i < currentProd.images.length; i++) {
+    for (let i = 0; i < productShowed.images.length; i++) {
         if (i === 0) {
 
             htmlImages += '<button type="button" data-bs-target="#ProductCarousel" data-bs-slide-to="' + i + '" class="active" aria-current="true" aria-label="Slide ' + i + '"></button>';
@@ -55,16 +127,16 @@ function showImagesHtml() {
     htmlImages += '</div>' + 
         '<div class="carousel-inner">';
 
-    for (let i = 0; i < currentProd.images.length; i++) {
+    for (let i = 0; i < productShowed.images.length; i++) {
         if (i === 0) {
             htmlImages += `
             <div class="carousel-item active" data-bs-interval="10000">
-            <img class="d-block w-100" src="${currentProd.images[i]}" alt="${currentProd.id + '-' + i}" ></img></div>
+            <img class="d-block w-100" src="${productShowed.images[i]}" alt="${productShowed.id + '-' + i}" ></img></div>
             `;
         } else {
             htmlImages += `
             <div class="carousel-item" data-bs-interval="2000">
-            <img class="d-block w-100" src="${currentProd.images[i]}" alt="${currentProd.id + '-' + i}" ></img></div>
+            <img class="d-block w-100" src="${productShowed.images[i]}" alt="${productShowed.id + '-' + i}" ></img></div>
             `;
         }
     }
