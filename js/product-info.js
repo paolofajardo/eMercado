@@ -1,7 +1,7 @@
 let prodID = JSON.parse(localStorage.getItem("prodID")); // Obteniendo prodID de localStorage
 let prodCAT = JSON.parse(localStorage.getItem("catID")); // Obteniendo catID de localStorage
 let urlPRODUCTS = PRODUCTS_URL + prodCAT + EXT_TYPE;// Generando URL concatenando variables desde init.js y catID desde localStorage
-let urlPROD = PRODUCT_INFO_URL + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
+let urlPROD = PRODUCT_INFO_URL+ + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
 let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE;// Generando Url concatenando variables para traer los comentarios independientemente por cada id.
 let currentProd; 
 let relatedProducts;//Se declaró la variable que almacena la información del producto relacionado
@@ -24,8 +24,8 @@ function getRelatedProducts() {
         if (resultObj.status === "ok") {
             let categoryData = resultObj.data;
 
-            // Verifica si la propiedad 'products' existe en el objeto
-            if ('products' in categoryData) {
+            
+            if ('products' in categoryData) { // Verifica si la propiedad 'products' existe en el objeto
                 // Obtenemos solo los productos de la misma categoría
                 let products = categoryData.products;
 
@@ -42,16 +42,14 @@ function getRelatedProducts() {
 function showRelatedProducts(relatedProducts) {
     let htmlRelatedProducts = '<h4>Productos Relacionados</h4><div class="row">';
 
-    // Verifica que haya productos relacionados antes de intentar acceder a ellos
     if (relatedProducts && relatedProducts.length > 0) {
-        for (let i = 0; i < relatedProducts.length; i++) {  
+        for (let i = 0; i < relatedProducts.length; i++) {
             let product = relatedProducts[i];
 
-            // Verifica si 'image' está definido en el producto y genera el HTML correspondiente para mostrar las cards
             if (product.image) {
                 htmlRelatedProducts += `
-                    <div class="col-md-6" id=cardsDiv>
-                        <div class="card mb-4 box-shadow" data-product-id="${product.id}">
+                    <div class="col-md-6" id="cardsDiv">
+                        <div class="card mb-4 box-shadow cursor-pointer" data-product-id="${product.id}">
                             <img class="card-img-top" src="${product.image}" alt="${product.name}">
                             <div class="card-body">
                                 <p class="card-text">${product.name}</p>
@@ -66,33 +64,53 @@ function showRelatedProducts(relatedProducts) {
 
         htmlRelatedProducts += '</div>';
     } else {
-        // Si no hay productos relacionados, muestra un mensaje
         htmlRelatedProducts += '<p>No hay productos relacionados</p>';
     }
 
     document.getElementById("related-products").innerHTML = htmlRelatedProducts;
-}
 
-document.addEventListener("DOMContentLoaded", function (e) {
-   
+    // Agrega un evento de clic a las tarjetas de productos relacionados
     let productCards = document.querySelectorAll('#related-products .card');
 
     productCards.forEach(card => {
         card.addEventListener('click', function () {
-      
+            // Obtiene el ID del producto relacionado seleccionado
             let selectedProductID = parseInt(card.getAttribute('data-product-id'));
 
-         
+            // Redirige al usuario a la página del producto relacionado
+            redirectToProduct(selectedProductID);
+        });
+    });
+}
+function redirectToProduct(productID) {
+    // Almacena el ID del producto seleccionado en localStorage
+    localStorage.setItem("prodID", productID);
+    
+    // Redirige al usuario a la página de detalles del producto
+    window.location.href = "product-info.html";
+}
+
+
+document.addEventListener("DOMContentLoaded", function (e) {
+    let productCards = document.querySelectorAll('#related-products .card');
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function () {
+            // Obtén el ID del producto relacionado seleccionado
+            let selectedProductID = parseInt(card.getAttribute('data-product-id'));
+
+            // Encuentra el objeto completo del producto seleccionado en la lista de productos relacionados
             let selectedProduct = relatedProducts.find(product => product.id === selectedProductID);
-          
-        
+
+            // Asegúrate de que se haya encontrado el producto antes de actualizar la página
+            if (selectedProduct) {
+                // Actualizar la página con la información del nuevo producto
                 showProductInfo(selectedProduct);
                 showImagesHtml(selectedProduct);
-            
+            }
         });
     });
 });
-
 
 
 function showProductInfo(productShowed) {
