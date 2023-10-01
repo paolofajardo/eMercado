@@ -243,19 +243,22 @@ body {
   background-color:var(--color-fondo);
   color:var(--color-fuente) 
 }
+
+footer {
+  background-color: #212529;
+}
+
 .userIcon{
   width: 25px;
   height: 25px;
   padding: 2px;
 }
 
-
-.userIcon{
+.userIcon {
   width: 25px;
   height: 25px;
   padding: 2px;
 }
-
 
 .list-group-item,
 .carousel {
