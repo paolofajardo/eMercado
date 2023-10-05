@@ -25,16 +25,32 @@ const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
 
       // Itera sobre los productos en el carrito y los imprime en la tabla
       cartData.articles.forEach(article => {
-        const subtotal = article.count * article.unitCost;
+        
         const rowHtml = `
         <tr>
         <td id="logo"><img src="${article.image}" alt="Producto" style="max-width: 100px;"></td>
         <td id="nombre">${article.name}</td>
-        <td id="precio">${article.currency}  ${article.unitCost}</td>
-        <td><input type="number" class="form-control" style="width: 10vh;" min="0" value="${article.count}" id="cantidad"></td>
-        <td id="subtotal">${article.currency}  ${subtotal}</td>
+        <td id="precio">${article.currency+' '}<span class="precio">${article.unitCost}</span></td>
+        <td><input type="number" class="form-control cantidad" style="width: 10vh;" min="1" value="${article.count}" onchange="recalcular();"></td>
+        <td><b>${article.currency+" "}<span class="subtotal">${article.count * article.unitCost}</span></b></td>
       </tr>
         `;
         cartTable.innerHTML += rowHtml;
       });
     }
+
+  function recalcular() {
+  let cantidad = document.getElementsByClassName('cantidad');
+  let resultado = document.getElementsByClassName('subtotal');
+  let precio = document.getElementsByClassName('precio');
+  
+  for (let i = 0; i < precio.length; i++) {
+    let cantidadValue = parseFloat(cantidad[i].value);
+    let precioValue = parseFloat(precio[i].innerHTML);
+    if (isNaN(cantidadValue)){
+      cantidadValue = 1;
+    }
+    resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
+    
+  }
+}
