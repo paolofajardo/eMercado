@@ -213,28 +213,16 @@ let htmlContentToAppend = '' // Construye el HTML para mostrar los comentarios
 let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
 const newDateTime = new Date().toISOString()
 const newDescription = document.getElementById('comment-product').value;
-let starRate = document.getElementById('rate-star').value;
+let valorEstrella = document.getElementById("stars").value
 
-//Repetimos el codigo de la funcion showComments() para mostrar las estrellas
-let starContainer = '<div class="stars-container">';
-let checkedStars = Math.floor(starRate);
-let emptyStars = 5 - checkedStars;
-
-    for (let i = 0; i < checkedStars; i++) {
-        starContainer += '<span class="fa fa-star checked"></span>';
-    }
-    
-    for (let i = 0; i < emptyStars; i++) {
-        starContainer += '<span class="fa fa-star"></span>';
-    }
-    
-    starContainer += '</div>';
      //Creamos el contenido del comentario dentro del documento HTML
     htmlContentToAppend += `
     <div class="card mb-3">
         <div class="card-body">
             <h6 class="card-title">${newUser.email}</h6>
-            ${starContainer}
+            <div class="d-flex flex-row">
+                            ${estrellas(valorEstrella)}
+                        </div>
             <small class="text-muted">${newDateTime}</small>
             <p class="card-text">${newDescription}</p>
         </div>
@@ -243,5 +231,17 @@ let emptyStars = 5 - checkedStars;
 
     document.getElementById('comments-section-new').innerHTML += htmlContentToAppend;
     document.getElementById('comment-product').value = ""
-    document.getElementById('rate-star').value = "0"
+    document.getElementById('stars').value = "1"
 });
+
+function estrellas(score) {
+    let estrella = ``
+    for (let i = 0; i < 5; i++) {
+        if (i < score) {
+            estrella += `<i class="fa fa-star checked"></i>`
+        } else {
+            estrella += `<i class="fa fa-star"></i>`
+        }
+    }
+    return estrella;
+};

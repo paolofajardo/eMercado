@@ -48,18 +48,15 @@
             <h6 class="h6 mt-3 mb-3">Tu opinión:</h6>
             <textarea class="form-control" id="comment-product" rows="4"></textarea>
             <h6 class="h6 mt-3 mb-3">Tu puntuación:</h6>
-            <select name="simple" id="rate-star" class="form-select w-50">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-            <button class="btn btn-dark mt-2" id="btn-comment">Enviar</button>
+            <div class="form-floating">
+              <input type="range" class="rating" id="stars" min="1" max="5" placeholder="1" value="1"
+                  oninput="this.style.setProperty('--value', this.value)">
+              <!--<label for="stars">Rating</label>-->
           </div>
+            <button class="btn btn-dark mt-2" id="btn-comment">Enviar</button>
+            </div>
           <div class="col-12 col-md-4" id="related-products"></div>
         </div>
-        
      </div>
   </main>
   <footer class="text-muted">
