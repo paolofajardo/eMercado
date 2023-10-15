@@ -391,3 +391,7 @@ input:checked + .slider:before {
   opacity: 0;
   width: calc(var(--starsize) / 2);
 }
+
+tr {
+  color: var(--color-fuente)
+}
