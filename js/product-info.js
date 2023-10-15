@@ -90,24 +90,57 @@ function redirectToProduct(productID) {
 
 function showProductInfo() {
     let htmlContentToAppend = "";
-
+  
     htmlContentToAppend += `
-            <div><h4>${currentProd.name}</h4></div>
-            <div class="input-group mb-3 align-items-center">
-              <div class="price-fontstyle">${currentProd.currency}&nbsp;${currentProd.cost}</div>
-              <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${currentProd.soldCount} vendidos</span>
-            </div>
-            <div class="fs-6 pt-1 pb-3">
-                <h6><strong>Descripción</strong></h5>${currentProd.description}
-            </div>
-            <div class="col-12">
-                <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
-            </div>
-        `;
-         //fs-x es como un hx
-
+      <div><h4>${currentProd.name}</h4></div>
+      <div class="input-group mb-3 align-items-center">
+        <div class="price-fontstyle">${currentProd.currency}&nbsp;${currentProd.cost}</div>
+        <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${currentProd.soldCount} vendidos</span>
+      </div>
+      <div class="fs-6 pt-1 pb-3">
+        <h6><strong>Descripción</strong></h6>${currentProd.description}
+      </div>
+      <div class="col-12">
+        <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
+      </div>
+    `;
+  
     document.getElementById("prod-info").innerHTML = htmlContentToAppend;
-};
+  
+    // Agrega un evento click al botón "Agregar Carrito"
+    const agregarCarritoButton = document.getElementById('agregar-carrito');
+    agregarCarritoButton.addEventListener('click', function () {
+      const productName = currentProd.name;
+      const productPrice = currentProd.cost;
+      const productImages = currentProd.images;
+  
+      const firstImage = productImages[0];
+  
+      const product = {
+        id: currentProd.id, 
+        name: productName,
+        count: 1, 
+        unitCost: productPrice,
+        currency: currentProd.currency, 
+        image: firstImage,
+      };
+      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+  
+      console.log('Producto a agregar al carrito:', product);
+  
+      carrito.push(product);
+  
+      console.log('Carrito actual después de agregar el producto:', carrito);
+  
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+  
+      console.log('Datos del carrito en localStorage:', localStorage.getItem('carrito'));
+  
+      // Redirige a la página del carrito
+      window.location.href = "cart.html";
+    });
+  }
+  
 
 function showImagesHtml() {
     let htmlImages = `
