@@ -114,13 +114,15 @@ function showProductInfo() {
       const productPrice = currentProd.cost;
       const productImages = currentProd.images;
   
+      const firstImage = productImages[0];
+  
       const product = {
         id: currentProd.id, 
         name: productName,
         count: 1, 
         unitCost: productPrice,
         currency: currentProd.currency, 
-        image: productImages,
+        image: firstImage,
       };
       const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
   
