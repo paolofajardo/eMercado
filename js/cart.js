@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const cartData = await response.json();
 
-    displayCartInfo(cartData);
+    displayCart(cartData);
   } catch (error) {
     console.error('Error al obtener el carrito:', error);
   }
