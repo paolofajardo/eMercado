@@ -37,7 +37,7 @@ function getRelatedProducts() {
 }
 
 function showRelatedProducts(relatedProducts) {
-    let htmlRelatedProducts = '<h4>Productos Relacionados</h4><div class="row">';
+    let htmlRelatedProducts = '<h4 class="py-4">Productos Relacionados</h4><div class="row">';
 
     if (relatedProducts && relatedProducts.length > 0) {
         for (let i = 0; i < relatedProducts.length; i++) {
