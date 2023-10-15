@@ -1,6 +1,14 @@
 const USER_ID = 25801;
 const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
 
+/* // Obtener el tipo de envío seleccionado
+const tipoEnvio = document.querySelector('input[name="tipoEnvio"]:checked').value;
+
+// Obtener la dirección de envío
+const calle = document.getElementById('calle').value;
+const numero = document.getElementById('numero').value;
+const esquina = document.getElementById('esquina').value; */
+
     document.addEventListener('DOMContentLoaded', async function () {
       try {
         // Petición Fetch al carrito de compras
@@ -54,3 +62,4 @@ const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
     
   }
 }
+
