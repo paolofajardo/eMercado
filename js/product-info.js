@@ -4,7 +4,7 @@ let urlPRODUCTS = PRODUCTS_URL + prodCAT + EXT_TYPE; // Generando URL concatenan
 let urlPROD = PRODUCT_INFO_URL+ + prodID + EXT_TYPE; // Generando URL concatenando variables desde init.js y prodID desde localStorage
 let urlCOMENTS = PRODUCT_INFO_COMMENTS_URL + prodID + EXT_TYPE; // Generando Url concatenando variables para traer los comentarios independientemente por cada id.
 let currentProd; //Se declara la variable que almacena la información del producto mostrado actualmente en la página
-let relatedProducts; //Se declara la variable que almacena la información de los productos relacionados
+let relatedProducts; //Se declara la variable que almacena la ifnformación de los productos relacionados
 
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -37,7 +37,7 @@ function getRelatedProducts() {
 }
 
 function showRelatedProducts(relatedProducts) {
-    let htmlRelatedProducts = '<h4 class="py-4">Productos Relacionados</h4><div class="row">';
+    let htmlRelatedProducts = '<h4 class="py-2">Productos Relacionados</h4><div class="row">';
 
     if (relatedProducts && relatedProducts.length > 0) {
         for (let i = 0; i < relatedProducts.length; i++) {
