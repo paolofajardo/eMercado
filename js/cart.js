@@ -38,13 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.error('Error al obtener el carrito:', error);
   }
   
-  // Agrega un manejador de eventos para los botones de eliminar
-  const eliminarBotones = document.querySelectorAll('.eliminar-articulo');
-  eliminarBotones.forEach(boton => {
-    boton.addEventListener('click', function() {
-      eliminarProducto(this);
-    });
-  });
+  displayCart();
 });
 
 function displayCart(cartData) {
@@ -63,11 +57,15 @@ function displayCart(cartData) {
         <td id="precio">${product.currency + ' '}<span class="precio">${product.unitCost}</span></td>
         <td><input type="number" class="form-control cantidad" style="width: 10vh;" min="1" value="${product.count}" onchange="recalcular();"></td>
         <td><b>${product.currency + ' '}<span class="subtotal">${product.count * product.unitCost}</span></b></td>
-        <td><button class="eliminar-articulo">Eliminar</button></td>
+        <td>
+          <a href="#" class="eliminar-articulo" data-product-id="${product.id}">
+            <i class="fas fa-trash-alt text-danger"></i> </a>
+        </td>
       </tr>
     `;
     cartTable.innerHTML += rowHtml;
   });
+  
 
   // Agrega de nuevo los manejadores de eventos para los botones de eliminar
   const eliminarBotones = document.querySelectorAll('.eliminar-articulo');
@@ -110,3 +108,4 @@ function recalcular() {
     resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
   }
 }
+
