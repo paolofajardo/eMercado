@@ -109,3 +109,64 @@ function recalcular() {
   }
 }
 
+function recalcular() {
+  let cantidad = document.getElementsByClassName('cantidad');
+  let resultado = document.getElementsByClassName('subtotal');
+  let precio = document.getElementsByClassName('precio');
+
+  for (let i = 0; i < precio.length; i++) {
+    let cantidadValue = parseFloat(cantidad[i].value);
+    let precioValue = parseFloat(precio[i].innerHTML);
+    if (isNaN(cantidadValue)) {
+      cantidadValue = 1;
+    }
+    resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
+  }
+}
+
+// funcion que calcula el subtotal final sumando el precio de todos los articulos en el carrito
+function calcularSubTotalFinal() {
+  const subtotales = document.getElementsByClassName('subtotal');
+  let finalSubTotal = 0;
+
+  for (let i = 0; i < subtotales.length; i++) {
+    finalSubTotal += parseFloat(subtotales[i].textContent);
+  }
+
+  const subTotalFinal = document.getElementById('subTotalFinal');
+  subTotalFinal.textContent = `USD ${finalSubTotal.toFixed(2)}`;
+};
+
+// funcion para calcular el porcentaje agregado segun el tipo de envio seleccionado
+function calcularEnvio() {
+  const envioPremium = document.getElementById('premiumEnvio');
+  const envioExpress = document.getElementById('expressEnvio');
+  const envioStandard = document.getElementById('standardEnvio');
+  const finalSubTotal = document.getElementById('subTotalFinal').textContent.replace('USD', '').trim();
+  let envioPorcentaje = 0;
+  
+  if (envioPremium.checked) {
+    envioPorcentaje = 15;
+  } else if (envioExpress.checked) {
+    envioPorcentaje = 7;
+  } else if (envioStandard.checked) {
+    envioPorcentaje = 5;
+  }
+  
+    const envioCosto = (finalSubTotal * envioPorcentaje) / 100;
+    const costoEnvio = document.getElementById('costoEnvio');
+    costoEnvio.textContent = `USD ${envioCosto.toFixed(2)}`;
+};
+
+function precioFinal() {
+  const precioFinalElement = document.getElementById('precioFinal');
+  const finalSubTotal = parseFloat(document.getElementById('subTotalFinal').textContent.replace('USD', '').trim());
+  const costoEnvio = parseFloat(document.getElementById('costoEnvio').textContent.replace('USD', '').trim());
+
+  const total = finalSubTotal + costoEnvio;
+  precioFinalElement.textContent = `USD ${total.toFixed(2)}`;
+}
+
+setInterval(precioFinal, 100);
+setInterval(calcularEnvio, 100);
+setInterval(calcularSubTotalFinal, 100);
