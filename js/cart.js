@@ -167,6 +167,106 @@ function precioFinal() {
   precioFinalElement.textContent = `USD ${total.toFixed(2)}`;
 }
 
+const creditCardCheckbox = document.getElementById("creditCardRadio");
+const bankTransferCheckbox = document.getElementById("bankTransferRadio");
+const creditCardFields = document.getElementById("creditCardFields");
+const bankTransferFields = document.getElementById("bankTransferFields");
+const saveButton = document.getElementById("saveButton");
+
+creditCardCheckbox.addEventListener("change", function () {
+  if (creditCardCheckbox.checked) {
+    // Habilitar los campos de tarjeta de crédito
+    enablePaymentFields(creditCardFields);
+    // Deshabilitar los campos de transferencia bancaria
+    disablePaymentFields(bankTransferFields);
+  } else {
+    // Si el checkbox no está marcado, deshabilitar los campos de tarjeta de crédito
+    disablePaymentFields(creditCardFields);
+  }
+});
+
+// Escuchar el evento 'change' del checkbox de transferencia bancaria
+bankTransferCheckbox.addEventListener("change", function () {
+  // Si el checkbox está marcado
+  if (bankTransferCheckbox.checked) {
+    // Habilitar los campos de transferencia bancaria
+    enablePaymentFields(bankTransferFields);
+    // Deshabilitar los campos de tarjeta de crédito
+    disablePaymentFields(creditCardFields);
+  } else {
+    // Si el checkbox no está marcado, deshabilitar los campos de transferencia bancaria
+    disablePaymentFields(bankTransferFields);
+  }
+});
+
+saveButton.addEventListener("click", function () {
+  // Obtiene la opción de pago seleccionada
+  const selectedOption = document.querySelector('input[name="paymentOption"]:checked');
+
+  if (selectedOption) {
+    if (selectedOption.value === "creditCard") {
+      // Verifica la validez del formulario de pago
+      if (paymentForm.checkValidity()) {
+        // Mostrar texto de tarjeta de crédito seleccionada
+        selectedPaymentText.textContent = "Tarjeta de Crédito";
+      } else {
+        // Mostrar mensajes de error del formulario
+        paymentForm.reportValidity();
+        return;
+      }
+    } 
+    else if (selectedOption.value === "bankTransfer") {
+      const accountNumberInput = document.getElementById("accountNumber");
+      const accountNumber = accountNumberInput.value;
+
+      // Validar si el número de cuenta está vacío
+      if (accountNumber.trim() === "") {
+        // Mostrar mensaje de error y detener el proceso
+        accountNumberInput.setCustomValidity("Completa este campo");
+        accountNumberInput.reportValidity();
+        return;
+      } else {
+        // Mostrar texto de transferencia bancaria seleccionada
+        selectedPaymentText.textContent = "Transferencia Bancaria";
+      }
+    }
+
+    // Ocultar el modal de pago y eliminar el fondo de pantalla modal
+    document.getElementById("paymentModal").style.display = "none";
+    document.querySelector(".modal-backdrop").remove();
+
+    // Deshabilitar todos los campos de pago
+    disablePaymentFields();
+  } else {
+    // Si no se ha seleccionado ninguna opción de pago, mostrar mensaje de alerta
+    const alertElement = document.createElement("div");
+    alertElement.className = "alert alert-danger";
+    alertElement.textContent = "Seleccione una opción de pago";
+    const modalBody = document.querySelector(".modal-body");
+    modalBody.appendChild(alertElement);
+    setTimeout(function () {
+      modalBody.removeChild(alertElement);
+    }, 2000);
+  }
+});
+
+// Función para habilitar campos de pago
+function enablePaymentFields(fieldGroup) {
+  // Iterar sobre los campos y remover el atributo 'disabled'
+  fieldGroup.querySelectorAll(".payment-field").forEach(function (field) {
+    field.removeAttribute("disabled");
+  });
+}
+
+// Función para deshabilitar campos de pago
+function disablePaymentFields(fieldGroup) {
+  // Itera sobre los campos y agregar el atributo 'disabled'
+  fieldGroup.querySelectorAll(".payment-field").forEach(function (field) {
+    field.setAttribute("disabled", true);
+  });
+}
+
+
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
 setInterval(calcularSubTotalFinal, 100);
