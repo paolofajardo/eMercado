@@ -266,6 +266,34 @@ function disablePaymentFields(fieldGroup) {
   });
 }
 
+  // Obtén el elemento de entrada
+  const expirationDateInput = document.getElementById("expirationDate");
+
+  // Agrega un event listener para el evento "input"
+  expirationDateInput.addEventListener("input", function() {
+    // Elimina cualquier carácter que no sea un dígito
+    this.value = this.value.replace(/\D/g, "");
+
+    // Asegúrate de que no haya más de 4 caracteres
+    if (this.value.length > 4) {
+      this.value = this.value.slice(0, 4);
+    }
+
+    // Agrega la barra "/" después de los primeros 2 caracteres del mes
+    if (this.value.length >= 2) {
+      this.value = this.value.slice(0, 2) + "/" + this.value.slice(2);
+    }
+  });
+
+  // Agrega un event listener para el evento "change"
+  expirationDateInput.addEventListener("change", function() {
+    // Verifica si el campo tiene exactamente 4 caracteres
+    if (this.value.length !== 5) {
+      alert("El campo debe tener 4 caracteres (MM/AA).");
+      this.value = "";
+    }
+  });
+
 
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
