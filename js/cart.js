@@ -295,6 +295,7 @@ function disablePaymentFields(fieldGroup) {
   });
 
 
+
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
 setInterval(calcularSubTotalFinal, 100);
@@ -334,21 +335,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  saveButton.addEventListener('click', () => {
-    const creditCardNumber = document.getElementById('creditCardNumber');
-    const securityCode = document.getElementById('securityCode');
-    const expirationDate = document.getElementById('expirationDate');
-
-    if (
-      !creditCardNumber.checkValidity() ||
-      !securityCode.checkValidity() ||
-      !expirationDate.checkValidity()
-    ) {
-      Swal.fire(
-        'Error',
-        'Por favor, complete todos los campos de la forma de pago.',
-        'error'
-      );
-    }
-  });
 });
