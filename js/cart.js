@@ -298,3 +298,57 @@ function disablePaymentFields(fieldGroup) {
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
 setInterval(calcularSubTotalFinal, 100);
+
+document.addEventListener('DOMContentLoaded', function () {
+  const checkoutForm = document.getElementById('checkoutForm');
+  const saveButton = document.getElementById('saveButton');
+
+  checkoutForm.addEventListener('submit', event => { // Agrega un evento submit al formulario
+    event.preventDefault(); // Evita el envío automático del formulario
+
+// Realiza la validación utilizando checkValidity() en los elementos del formulario
+    const formElements = checkoutForm.elements;
+    let validity = true;
+
+    for (const element of formElements) {
+      if (element.type !== 'submit') {
+        if (!element.checkValidity()) {
+          validity = false;
+          break; // Para la validación si se encuentra un campo inválido
+        }
+      }
+    }
+    
+// Verifica la forma de pago, los campos de radio no pueden estar sin seleccionar
+    const formaPago = document.querySelector('input[name="paymentOption"]:checked');
+    if (!formaPago) {
+      validity = false;
+    }
+
+    if (validity) { // Si el formulario es válido, puedes proceder con la compra
+      Swal.fire(
+        'Compra exitosa',
+        'Hemos recibido su pedido. Le enviaremos una confirmación por correo electrónico con los detalles de envío en breve',
+        'success'
+      );
+    }
+  });
+
+  saveButton.addEventListener('click', () => {
+    const creditCardNumber = document.getElementById('creditCardNumber');
+    const securityCode = document.getElementById('securityCode');
+    const expirationDate = document.getElementById('expirationDate');
+
+    if (
+      !creditCardNumber.checkValidity() ||
+      !securityCode.checkValidity() ||
+      !expirationDate.checkValidity()
+    ) {
+      Swal.fire(
+        'Error',
+        'Por favor, complete todos los campos de la forma de pago.',
+        'error'
+      );
+    }
+  });
+});
