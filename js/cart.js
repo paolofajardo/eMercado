@@ -302,7 +302,6 @@ setInterval(calcularSubTotalFinal, 100);
 
 document.addEventListener('DOMContentLoaded', function () {
   const checkoutForm = document.getElementById('checkoutForm');
-  const saveButton = document.getElementById('saveButton');
 
   checkoutForm.addEventListener('submit', event => { // Agrega un evento submit al formulario
     event.preventDefault(); // Evita el envío automático del formulario
@@ -324,7 +323,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const formaPago = document.querySelector('input[name="paymentOption"]:checked');
     if (!formaPago) {
       validity = false;
-    }
+      Swal.fire(
+        'Error',
+        'Por favor, complete todos los campos de la forma de pago.',
+        'error'
+    )};
 
     if (validity) { // Si el formulario es válido, puedes proceder con la compra
       Swal.fire(
