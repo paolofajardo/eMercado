@@ -289,7 +289,11 @@ function disablePaymentFields(fieldGroup) {
   expirationDateInput.addEventListener("change", function() {
     // Verifica si el campo tiene exactamente 4 caracteres
     if (this.value.length !== 5) {
-      alert("El campo debe tener 4 caracteres (MM/AA).");
+      Swal.fire(
+        'Error',
+        'El campo debe tener 4 caracteres (MM/AA).',
+        'error'
+    );
       this.value = "";
     }
   });
