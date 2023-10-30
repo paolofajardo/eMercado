@@ -50,19 +50,29 @@ function displayCart(cartData) {
 
   // Itera sobre los productos en el carrito y se muestran en la tabla
   carrito.forEach(product => {
+    let currencySymbol = product.currency;
+
+    if (product.currency === 'UYU') {
+      currencySymbol = 'USD';
+    }
+    const unitCost = product.currency === 'UYU' ? (product.unitCost / 39).toFixed(1) : product.unitCost.toFixed(1);
+    const subtotal = (product.count * unitCost).toFixed(1);
+  
     const rowHtml = `
       <tr>
         <td id="logo"><img src="${product.image}" alt="Producto" style="max-width: 110px;"></td>
         <td id="nombre">${product.name}</td>
-        <td id="precio">${product.currency + ' '}<span class="precio">${product.unitCost}</span></td>
+        <td id="precio">${currencySymbol + ' '}<span class="precio">${unitCost}</span></td>
         <td><input type="number" class="form-control cantidad" style="width: 10vh;" min="1" value="${product.count}" onchange="recalcular();"></td>
-        <td><b>${product.currency + ' '}<span class="subtotal">${product.count * product.unitCost}</span></b></td>
+        <td><b>${currencySymbol + ' '}<span class="subtotal">${subtotal}</span></b></td>
         <td>
           <a href="#" class="eliminar-articulo" data-product-id="${product.id}">
-            <i class="fas fa-trash-alt text-danger"></i> </a>
+            <i class="fas fa-trash-alt text-danger"></i>
+          </a>
         </td>
       </tr>
     `;
+  
     cartTable.innerHTML += rowHtml;
   });
   
