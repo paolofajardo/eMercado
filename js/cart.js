@@ -101,21 +101,6 @@ function recalcular() {
 
   for (let i = 0; i < precio.length; i++) {
     let cantidadValue = parseFloat(cantidad[i].value);
-    let precioValue = parseFloat(precio[i].querySelector('.precio').innerHTML);
-    if (isNaN(cantidadValue)) {
-      cantidadValue = 1;
-    }
-    resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
-  }
-}
-
-function recalcular() {
-  let cantidad = document.getElementsByClassName('cantidad');
-  let resultado = document.getElementsByClassName('subtotal');
-  let precio = document.getElementsByClassName('precio');
-
-  for (let i = 0; i < precio.length; i++) {
-    let cantidadValue = parseFloat(cantidad[i].value);
     let precioValue = parseFloat(precio[i].innerHTML);
     if (isNaN(cantidadValue)) {
       cantidadValue = 1;
