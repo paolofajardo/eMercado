@@ -7,10 +7,11 @@ let loginBtn = document.getElementById('loginBtn');
       
   registerBtn.addEventListener('click', () => {
         let usuario = {};
+        usuario.profilename = document.getElementById('register-name').value;
         usuario.email = document.getElementById('register-mail').value;
         usuario.pass = document.getElementById('register-password').value;
         let checkbox = document.getElementById('checkbox');
-        if (usuario.email !== '' && usuario.pass !== '') {
+        if (usuario.email !== '' && usuario.pass !== '' && usuario.profilename !== '') {
           Swal.fire({
             icon: 'success',
             title: 'Registro exitoso',
