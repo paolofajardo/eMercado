@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
         profileTelInput.value = profileTel;
 
         // Creando objeto
-        const userData = {
-            name1: profileName1,
+        const usuario = {
+            profilename: profileName1,
             name2: profileName2,
             surname1: profileSurname1,
             surname2: profileSurname2,
@@ -39,11 +39,14 @@ document.addEventListener("DOMContentLoaded", function () {
             tel: profileTel
         };
 
-        // Convierte el objeto userData a cadena JSON
-        const userDataJSON = JSON.stringify(userData);
+        // Convierte el objeto usuario a cadena JSON
+        const usuarioJSON = JSON.stringify(usuario);
+
+        // Elimina el usuario actual
+        localStorage.removeItem("usuario");
 
         // Almacena en el almacenamiento local
-        localStorage.setItem("userData", userDataJSON);
+        localStorage.setItem("usuario", usuarioJSON);
 
         // Notifica al usuario que los datos se han guardado con éxito
         alert("Los datos se han guardado con éxito en el almacenamiento local.");
@@ -52,4 +55,20 @@ document.addEventListener("DOMContentLoaded", function () {
         profileTelInput.addEventListener("input", function () {
         this.value = this.value.replace(/[^0-9+]/g, ""); // Permite números y el carácter "+", elimina todo lo demás
     });
+
+    //obtiene los datos del usuario logeado y los coloca en sus campos determinados
+    const profileNameprecargado = document.getElementById("profilename1");
+    const profileMailprecargado = document.getElementById("profilemail");
+    const usuarioObj = JSON.parse(localStorage.getItem('usuario'));
+    profileNameprecargado.value = usuarioObj.profilename;
+    profileMailprecargado.value = usuarioObj.email;
+
+    //obtiene los datos adicionales y los coloca en sus campos determinados
+    const profileName2 = document.getElementById("profilename2")
+    const profileSurname1 = document.getElementById("profilesurname1");
+    const profileSurname2 = document.getElementById("profilesurname2");
+    profileName2.value = usuarioObj.name2.replace("undefined", "");
+    profileSurname1.value = usuarioObj.surname1;
+    profileSurname2.value = usuarioObj.surname2;
+    profileTelInput.value = usuarioObj.tel;
 });
