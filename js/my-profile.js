@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (profileImageFile) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                profileImagePreview.src = e.target.result;
+                const imageDataURL = e.target.result;
+                localStorage.setItem("profileImage", imageDataURL);
+                profileImagePreview.src = imageDataURL;
             };
             reader.readAsDataURL(profileImageFile);
-        } else {
-            profileImagePreview.src = "";
         }
 
         // Almacena en el almacenamiento local
@@ -85,4 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
     profileSurname1.value = usuarioObj.surname1;
     profileSurname2.value = usuarioObj.surname2;
     profileTelInput.value = usuarioObj.tel;
+
+    //obtiene la imagen del localstorage y la coloca en su campo determinado
+    const imagenPerfil = document.getElementById("profileimage-preview");
+    const storedImageDataURL = localStorage.getItem("profileImage");
+    if (storedImageDataURL) {
+        imagenPerfil.src = storedImageDataURL;
+    };
 });
