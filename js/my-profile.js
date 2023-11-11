@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const profileSurname1 = document.getElementById("profilesurname1").value;
         const profileSurname2 = document.getElementById("profilesurname2").value;
         const profileMail = document.getElementById("profilemail").value;
+        const profileImageInput = document.getElementById("profileimage");
+        const profileImagePreview = document.getElementById("profileimage-preview");
 
         // Validacion de campos con *
         if (profileName1.trim() === "" || profileSurname1.trim() === "" || profileMail.trim() === "") {
@@ -44,6 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Elimina el usuario actual
         localStorage.removeItem("usuario");
+
+        // Guardar imagen seleccionada
+        const profileImageFile = profileImageInput.files[0];
+        if (profileImageFile) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profileImagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(profileImageFile);
+        } else {
+            profileImagePreview.src = "";
+        }
 
         // Almacena en el almacenamiento local
         localStorage.setItem("usuario", usuarioJSON);
