@@ -361,7 +361,7 @@ tr {
   color: var(--color-fuente)
 }
 
-/*Quita las flechas de lo input type number*/
+/*Quita las flechas de los input type number*/
 .no-arrow-input[type="number"]::-webkit-inner-spin-button,
 .no-arrow-input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
