@@ -6,7 +6,7 @@ let currentSortCriteria = undefined;
 let minCount = undefined;
 let maxCount = undefined;
 
-// Ordena las categorías según el criterio especificado
+// Ordena las categorías según el criterio especificado.
 function sortCategories(criteria, array){
     let result = [];
 
