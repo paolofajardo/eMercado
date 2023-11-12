@@ -1,9 +1,12 @@
+// Se espera a que el contenido del DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
+    // Obtención de elementos del DOM
     const guardarDatosButton = document.getElementById("guardarDatos");
     const profileTelInput = document.getElementById("profiletel"); // Debe ser colocado afuera de guardarDatosButton porque de lo contrario no se puede escuchar el evento input.
 
+    // Evento click para el botón "Guardar Datos"
     guardarDatosButton.addEventListener("click", function () {
-        // Obténer valores
+        // Obténer de valores de los campos de entrada
         const profileName1 = document.getElementById("profilename1").value;
         const profileName2 = document.getElementById("profilename2").value;
         const profileSurname1 = document.getElementById("profilesurname1").value;
@@ -12,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const profileImageInput = document.getElementById("profileimage");
         const profileImagePreview = document.getElementById("profileimage-preview");
 
-        // Validacion de campos con *
+        // Validacion de campos con (*)
         if (profileName1.trim() === "" || profileSurname1.trim() === "" || profileMail.trim() === "") {
             alert("Los campos marcados con (*) son obligatorios. Completa todos los campos.");
             return;
