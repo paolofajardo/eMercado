@@ -1,0 +1,32 @@
+{
+  "name": "emercado",
+  "version": "1.0.0",
+  "description": "plataforma ecommerce con fines educativos",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paolofajardo/eMercado.git"
+  },
+  "keywords": [
+    "[\"JAP",
+    "2023\"",
+    "\"Grupo",
+    "265\"",
+    "\"eMercado\"]"
+  ],
+  "author": "Subgrupo 4",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paolofajardo/eMercado/issues"
+  },
+  "homepage": "https://github.com/paolofajardo/eMercado#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.0.1"
+  }
+}
