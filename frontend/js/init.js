@@ -40,19 +40,19 @@ let getJSONData = function (url) {
     });
 }
 
-/*
-function verificarAutenticacion() {
+
+/* function verificarAutenticacion() {
   // Verifica si el usuario está logeado
   if (!localStorage.getItem("usuario") && !sessionStorage.getItem("usuario")) {
     // Si no lo está, redirige al login
     window.location.href = "login.html";
   }
-}
-*/
+} */
+
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  verificarAutenticacion();
+/*   verificarAutenticacion(); */
 
   // Se obtiene el nombre de usuario almacenado
   let userName = "";

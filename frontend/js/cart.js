@@ -1,7 +1,7 @@
 const USER_ID = 25801;
 const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
 const token = localStorage.getItem('token');
-
+console.log('hola');
 const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
 // Comprueba si el carrito ya contiene el producto precargado
@@ -17,23 +17,39 @@ if (!peugeot208) {
     currency: "USD",
     image: "img/prod50924_1.jpg",
   };
-
+  
   carrito.push(product);
+}
 
   fetch('http://localhost:3000/cart', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(product),
-    mode: 'cors',
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'authorization': `Bearer ${token}`
+  }
+  })
+  .then(response => {
+    console.log(response.status);
+   if (response.status === 401) {
+     // Si el servidor responde con un estado 401, redirige al usuario
+      window.location.href = '/frontend/login.html'; // Cambia esto por la URL de tu página de inicio de sesión
+    } else {
+      return response.json(); // Procesa la respuesta normal si no es un 401
+   }
+  })
+  .then(data => {
+   // Maneja los datos de la respuesta (si no es un 401)
+   console.log(data);
+  })
+  .catch(error => {
+   console.error('Hubo un error en la solicitud:', error);
   });
+
 
 
   // Actualiza el carrito en el Local Storage
   localStorage.setItem('carrito', JSON.stringify(carrito));
-}
+
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
