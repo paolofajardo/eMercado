@@ -279,6 +279,7 @@ function disablePaymentFields(fieldGroup) {
     }
   });
 
+//No funciona aún  
 const creditCardNumberInput = document.getElementById('creditCardNumber');
 
 creditCardNumberInput.addEventListener("input", function() {
