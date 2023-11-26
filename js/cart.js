@@ -17,6 +17,15 @@ if (!peugeot208) {
     image: "img/prod50924_1.jpg",
   };
 
+  fetch('http://localhost:3000/cart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(product),
+    mode: 'cors',
+  });
+
   carrito.push(product);
 
   // Actualiza el carrito en el Local Storage
@@ -37,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   } catch (error) {
     console.error('Error al obtener el carrito:', error);
   }
-  
+
   displayCart();
 });
 
@@ -57,7 +66,7 @@ function displayCart(cartData) {
     }
     const unitCost = product.currency === 'UYU' ? (product.unitCost / 39).toFixed(1) : product.unitCost.toFixed(1);
     const subtotal = (product.count * unitCost).toFixed(1);
-  
+
     const rowHtml = `
       <tr>
         <td id="logo"><img src="${product.image}" alt="Producto" style="max-width: 110px;"></td>
@@ -72,16 +81,37 @@ function displayCart(cartData) {
         </td>
       </tr>
     `;
-  
+    
     cartTable.innerHTML += rowHtml;
   });
-  
+
 
   // Agrega de nuevo los manejadores de eventos para los botones de eliminar
   const eliminarBotones = document.querySelectorAll('.eliminar-articulo');
   eliminarBotones.forEach(boton => {
-    boton.addEventListener('click', function() {
+    boton.addEventListener('click', function () {
       eliminarProducto(this);
+      const prodId = this.getAttribute('data-product-id');
+
+      fetch(`http://localhost:3000/cart/${prodId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('elemento eliminada correctamente:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     });
   });
 }
@@ -108,7 +138,7 @@ function recalcular() {
   let cantidad = document.getElementsByClassName('cantidad');
   let resultado = document.getElementsByClassName('subtotal');
   let precio = document.getElementsByClassName('precio');
-
+  
   for (let i = 0; i < precio.length; i++) {
     let cantidadValue = parseFloat(cantidad[i].value);
     let precioValue = parseFloat(precio[i].innerHTML);
@@ -116,6 +146,28 @@ function recalcular() {
       cantidadValue = 1;
     }
     resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
+
+    // Obtén el id del producto específico en el índice actual
+    const prodId = document.querySelectorAll('.eliminar-articulo')[i].getAttribute('data-product-id');
+
+    // Actualiza la cantidad en el servidor utilizando el método PUT
+    fetch(`http://localhost:3000/cart/${prodId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      body: JSON.stringify({ count: cantidadValue }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Cantidad actualizada correctamente:', data);
+      });
   }
 }
 
@@ -139,7 +191,7 @@ function calcularEnvio() {
   const envioStandard = document.getElementById('standardEnvio');
   const finalSubTotal = document.getElementById('subTotalFinal').textContent.replace('USD', '').trim();
   let envioPorcentaje = 0;
-  
+
   if (envioPremium.checked) {
     envioPorcentaje = 15;
   } else if (envioExpress.checked) {
@@ -147,10 +199,10 @@ function calcularEnvio() {
   } else if (envioStandard.checked) {
     envioPorcentaje = 5;
   }
-  
-    const envioCosto = (finalSubTotal * envioPorcentaje) / 100;
-    const costoEnvio = document.getElementById('costoEnvio');
-    costoEnvio.textContent = `USD ${envioCosto.toFixed(2)}`;
+
+  const envioCosto = (finalSubTotal * envioPorcentaje) / 100;
+  const costoEnvio = document.getElementById('costoEnvio');
+  costoEnvio.textContent = `USD ${envioCosto.toFixed(2)}`;
 };
 
 function precioFinal() {
@@ -209,7 +261,7 @@ saveButton.addEventListener("click", function () {
         paymentForm.reportValidity();
         return;
       }
-    } 
+    }
     else if (selectedOption.value === "bankTransfer") {
       const accountNumberInput = document.getElementById("accountNumber");
       const accountNumber = accountNumberInput.value;
@@ -261,37 +313,37 @@ function disablePaymentFields(fieldGroup) {
   });
 }
 
-  // Obtén el elemento de entrada
-  const expirationDateInput = document.getElementById("expirationDate");
+// Obtén el elemento de entrada
+const expirationDateInput = document.getElementById("expirationDate");
 
-  // Agrega un event listener para el evento "input"
-  expirationDateInput.addEventListener("input", function() {
-    // Elimina cualquier carácter que no sea un dígito
-    this.value = this.value.replace(/\D/g, "");
+// Agrega un event listener para el evento "input"
+expirationDateInput.addEventListener("input", function () {
+  // Elimina cualquier carácter que no sea un dígito
+  this.value = this.value.replace(/\D/g, "");
 
-    // Asegúrate de que no haya más de 4 caracteres
-    if (this.value.length > 4) {
-      this.value = this.value.slice(0, 4);
-    }
+  // Asegúrate de que no haya más de 4 caracteres
+  if (this.value.length > 4) {
+    this.value = this.value.slice(0, 4);
+  }
 
-    // Agrega la barra "/" después de los primeros 2 caracteres del mes
-    if (this.value.length >= 2) {
-      this.value = this.value.slice(0, 2) + "/" + this.value.slice(2);
-    }
-  });
+  // Agrega la barra "/" después de los primeros 2 caracteres del mes
+  if (this.value.length >= 2) {
+    this.value = this.value.slice(0, 2) + "/" + this.value.slice(2);
+  }
+});
 
-  // Agrega un event listener para el evento "change"
-  expirationDateInput.addEventListener("change", function() {
-    // Verifica si el campo tiene exactamente 4 caracteres
-    if (this.value.length !== 5) {
-      Swal.fire(
-        'Error',
-        'El campo debe tener 4 caracteres (MM/AA).',
-        'error'
+// Agrega un event listener para el evento "change"
+expirationDateInput.addEventListener("change", function () {
+  // Verifica si el campo tiene exactamente 4 caracteres
+  if (this.value.length !== 5) {
+    Swal.fire(
+      'Error',
+      'El campo debe tener 4 caracteres (MM/AA).',
+      'error'
     );
-      this.value = "";
-    }
-  });
+    this.value = "";
+  }
+});
 
 
 
@@ -305,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
   checkoutForm.addEventListener('submit', event => { // Agrega un evento submit al formulario
     event.preventDefault(); // Evita el envío automático del formulario
 
-// Realiza la validación utilizando checkValidity() en los elementos del formulario
+    // Realiza la validación utilizando checkValidity() en los elementos del formulario
     const formElements = checkoutForm.elements;
     let validity = true;
 
@@ -317,8 +369,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     }
-    
-// Verifica la forma de pago, los campos de radio no pueden estar sin seleccionar
+
+    // Verifica la forma de pago, los campos de radio no pueden estar sin seleccionar
     const formaPago = document.querySelector('input[name="paymentOption"]:checked');
     if (!formaPago) {
       validity = false;
@@ -326,7 +378,8 @@ document.addEventListener('DOMContentLoaded', function () {
         'Error',
         'Por favor, complete todos los campos de la forma de pago.',
         'error'
-    )};
+      )
+    };
 
     if (validity) { // Si el formulario es válido, puedes proceder con la compra
       Swal.fire(

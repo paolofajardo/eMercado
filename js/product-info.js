@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
             currentProd = resultObj.data;
             showProductInfo(); // Muestra la información del producto actual en el HTML
             showImagesHtml(); // Corresponde al carrusel de imagenes del producto actual
-            showComments(); 
+            showComments();
             getRelatedProducts(); //Obtiene los productos relacionados 
         }
     });
@@ -33,13 +33,13 @@ function getRelatedProducts() {
             let categoryData = resultObj.data;
 
             if ('products' in categoryData) { // Verifica si la propiedad 'products' existe en el objeto
-               
+
                 let products = categoryData.products; // Obtenemos solo los productos de la misma categoría
 
                 // Evita que se muestre el producto actual entre los relacionados
-                relatedProducts = products.filter(product => product.id !== currentProd.id); 
-                
-                
+                relatedProducts = products.filter(product => product.id !== currentProd.id);
+
+
                 showRelatedProducts(relatedProducts); // Muestra las cards de productos relacionados
             }
         }
@@ -78,35 +78,35 @@ function showRelatedProducts(relatedProducts) {
     document.getElementById("related-products").innerHTML = htmlRelatedProducts;
 
     // Agrega un evento de clic a las tarjetas de productos relacionados
-    let productCards = document.querySelectorAll('#related-products .card'); 
+    let productCards = document.querySelectorAll('#related-products .card');
 
     productCards.forEach(card => {
         card.addEventListener('click', function () {
-            
+
             // Obtiene el ID del producto relacionado seleccionado
-            let selectedProductID = parseInt(card.getAttribute('data-product-id')); 
-            
+            let selectedProductID = parseInt(card.getAttribute('data-product-id'));
+
             // Redirige al usuario a la página del producto relacionado
-            redirectToProduct(selectedProductID); 
+            redirectToProduct(selectedProductID);
         });
     });
 }
 
 function redirectToProduct(productID) {
-    
+
     // Almacena el ID del producto seleccionado en localStorage
-    
+
     localStorage.setItem("prodID", productID);
-    
+
     // Redirige al usuario a la página de detalles del producto
-    window.location.href = "product-info.html"; 
+    window.location.href = "product-info.html";
 }
 
 
 // Muestra la información del producto actual en el HTML
 function showProductInfo() {
     let htmlContentToAppend = "";
-    
+
     // Construye el HTML para mostrar la información del producto
     htmlContentToAppend += `
       <div><h4>${currentProd.name}</h4></div>
@@ -121,45 +121,72 @@ function showProductInfo() {
         <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
       </div>
     `;
-  
+
     document.getElementById("prod-info").innerHTML = htmlContentToAppend;
-  
+
     // Agrega un evento click al botón "Agregar Carrito"
     const agregarCarritoButton = document.getElementById('agregar-carrito');
     agregarCarritoButton.addEventListener('click', function () {
-      const productName = currentProd.name;
-      const productPrice = currentProd.cost;
-      const productImages = currentProd.images;
-  
-      const firstImage = productImages[0];
-  
-      const product = {
-        id: currentProd.id, 
-        name: productName,
-        count: 1, 
-        unitCost: productPrice,
-        currency: currentProd.currency, 
-        image: firstImage,
-      };
-      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-  
-      console.log('Producto a agregar al carrito:', product);
-  
-      carrito.push(product);
-  
-      console.log('Carrito actual después de agregar el producto:', carrito);
-  
-      localStorage.setItem('carrito', JSON.stringify(carrito));
-  
-      console.log('Datos del carrito en localStorage:', localStorage.getItem('carrito'));
-  
-      // Redirige a la página del carrito
-      window.location.href = "cart.html";
+        const productName = currentProd.name;
+        const productPrice = currentProd.cost;
+        const productImages = currentProd.images;
+        const productCount = currentProd.count;
+
+        const firstImage = productImages[0];
+
+        const product = {
+            id: currentProd.id,
+            name: productName,
+            count: productCount,
+            unitCost: productPrice,
+            currency: currentProd.currency,
+            image: firstImage,
+        };
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+        console.log('Producto a agregar al carrito:', product);
+
+        carrito.push(product);
+
+        console.log('Carrito actual después de agregar el producto:', carrito);
+
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+
+        console.log('Datos del carrito en localStorage:', localStorage.getItem('carrito'));
+
+        // Redirige a la página del carrito
+        window.location.href = "cart.html";
+
+        //sube los datos a la base de datos
+        console.log('item:', product);
+
+        // Realizar la solicitud POST al servidor backend
+        fetch('http://localhost:3000/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(product),
+            mode: 'cors',
+        })
+            .then(response => {
+                // Verifica si la respuesta está en el rango de códigos de estado exitosos
+                if (!response.ok) {
+                    throw new Error('La solicitud no fue exitosa: ' + response.status);
+                }
+                return response.json(); // Devuelve la promesa para el siguiente .then
+            })
+            .then(data => {
+                console.log('Artículo agregado al carrito correctamente:', data);
+            })
+            .catch(error => {
+                console.error('Error al agregar el artículo al carrito:', error);
+            });
     });
-  }
-  
-    // Muestra el carrusel de imágenes del producto actual
-    function showImagesHtml() {
+}
+
+// Muestra el carrusel de imágenes del producto actual
+function showImagesHtml() {
     let htmlImages = `
     <div id="ProductCarousel" class="carousel carousel-dark slide img-thumbnail" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -174,7 +201,7 @@ function showProductInfo() {
         }
     }
 
-    htmlImages += '</div>' + 
+    htmlImages += '</div>' +
         '<div class="carousel-inner">';
 
     for (let i = 0; i < currentProd.images.length; i++) {
@@ -208,38 +235,38 @@ function showProductInfo() {
 };
 
 
-     // Muestra los comentarios del producto actual
-    function showComments() {
+// Muestra los comentarios del producto actual
+function showComments() {
 
     // Realiza una solicitud GET a la URL de los comentarios
-    getJSONData(urlCOMENTS).then(function (resultObj) { 
+    getJSONData(urlCOMENTS).then(function (resultObj) {
         if (resultObj.status === "ok") {
             let comments = resultObj.data;
 
             // Construye el HTML para mostrar los comentarios
-            let htmlContentToAppend = '<h4>Comentarios</h4>'; 
+            let htmlContentToAppend = '<h4>Comentarios</h4>';
 
             for (let i = 0; i < comments.length; i++) {
                 let comment = comments[i];
 
                 // Calcula la cantidad de estrellas llenas y vacías según el puntaje
-                let checkedStars = Math.floor(comment.score); 
+                let checkedStars = Math.floor(comment.score);
                 let emptyStars = 5 - checkedStars;
 
                 // Crea un contenedor para las estrellas
-                let starContenedor = '<div class="stars-container">'; 
+                let starContenedor = '<div class="stars-container">';
 
                 // Agrega las estrellas llenas 
-                for (let i = 0; i < checkedStars; i++) { 
+                for (let i = 0; i < checkedStars; i++) {
                     starContenedor += '<span class="fa fa-star checked"></span>';
                 }
                 // Agrega las estrellas vacías
-                for (let i = 0; i < emptyStars; i++) { 
+                for (let i = 0; i < emptyStars; i++) {
                     starContenedor += '<span class="fa fa-star"></span>';
                 }
 
                 // Cierra el contenedor de estrellas
-                starContenedor += '</div>'; 
+                starContenedor += '</div>';
 
                 htmlContentToAppend += `
                     <div class="card mb-3">
@@ -252,26 +279,26 @@ function showProductInfo() {
                     </div>
                 `;
             }
-            
+
             // Agrega los comentarios al elemento con id "comments-section"
-            document.getElementById("comments-section").innerHTML = htmlContentToAppend; 
+            document.getElementById("comments-section").innerHTML = htmlContentToAppend;
         }
     });
 }
 
 // Se le da funcionalidad al boton para sumar el comentario
-document.getElementById('btn-comment').addEventListener('click', function () { 
+document.getElementById('btn-comment').addEventListener('click', function () {
 
     // Construye el HTML para mostrar los comentarios
-let htmlContentToAppend = '' 
+    let htmlContentToAppend = ''
 
-// Se toman los valores necesarios para la construccion del comentario 
-let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
-const newDateTime = new Date().toISOString()
-const newDescription = document.getElementById('comment-product').value;
-let valorEstrella = document.getElementById("stars").value
+    // Se toman los valores necesarios para la construccion del comentario 
+    let newUser = JSON.parse(localStorage.getItem('usuario') || sessionStorage.getItem('usuario'))
+    const newDateTime = new Date().toISOString()
+    const newDescription = document.getElementById('comment-product').value;
+    let valorEstrella = document.getElementById("stars").value
 
-     //Creamos el contenido del comentario dentro del documento HTML
+    //Creamos el contenido del comentario dentro del documento HTML
     htmlContentToAppend += `
     <div class="card mb-3">
         <div class="card-body">
