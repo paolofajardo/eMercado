@@ -31,20 +31,27 @@ app.post('/login', (req, res) => {
 });
 
 
-app.use("/cart", (req, res, next) => {
-  try {
-    const decoded = jwt.verify(req.headers["Authorization"], secretKey);
-    console.log(decoded);
-    next();
-  } catch (err) {
-    res.status(401).json({ message: "Usuario no autorizado" });
+// Middleware para verificar el token
+function verificarToken(req, res, next) {
+  const bearerHeader = req.headers['authorization'];
+  if (typeof bearerHeader !== 'undefined') {
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    jwt.verify(bearerToken, secretKey, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Token inválido' });
+      } else {
+        req.user = decoded;
+        next();
+      }
+    });
+  } else {
+    res.status(401).json({ error: 'Token no proporcionado' });
   }
-});
+}
 
 // Ruta GET para /cart
-app.get("/cart", (req, res) => {
-  // Si el middleware pasa la autorización, se ejecutará esta parte
-  // Aquí puedes devolver la información del carrito o realizar operaciones relacionadas con él
+app.get('/cart', verificarToken, (req, res) => {
   res.status(200).json({ message: "Obtener información del carrito" });
 });
 
