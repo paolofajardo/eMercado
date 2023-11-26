@@ -31,34 +31,22 @@ app.post('/login', (req, res) => {
 });
 
 
-// Definir el middleware de autenticación
-function verificarToken(req, res, next) {
-  const token = req.headers.authorization; // Se asume que el token se envía en el encabezado de autorización
-
-  if (token) {
-    // Verificar el token utilizando la clave secreta
-    jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ mensaje: 'Token inválido' });
-      } else {
-        // Si el token es válido, se permite que la solicitud continúe
-        req.usuario = decoded.usuario; // Almacenar el usuario en el objeto de solicitud para su uso posterior
-        next();
-      }
-    });
-  } else {
-    res.status(401).json({ mensaje: 'Token no proporcionado' });
+app.use("/cart", (req, res, next) => {
+  try {
+    const decoded = jwt.verify(req.headers["Authorization"], secretKey);
+    console.log(decoded);
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Usuario no autorizado" });
   }
-}
-
-// Middleware para proteger la ruta /cart
-app.get('/cart', verificarToken, (req, res) => {
-  // Esta función se ejecutará solamente si el token es válido
-  // Aquí puedes colocar la lógica para la ruta /cart
 });
 
-  
-
+// Ruta GET para /cart
+app.get("/cart", (req, res) => {
+  // Si el middleware pasa la autorización, se ejecutará esta parte
+  // Aquí puedes devolver la información del carrito o realizar operaciones relacionadas con él
+  res.status(200).json({ message: "Obtener información del carrito" });
+});
 
 
 app.listen(port, () => {

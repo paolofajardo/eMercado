@@ -13,6 +13,8 @@ let currentProd;
 // Se declara la variable que almacena la información de los productos relacionados
 let relatedProducts;
 
+const token = localStorage.getItem('token');
+
 document.addEventListener("DOMContentLoaded", function (e) {
     // Obtener la información del producto actual al cargar la página
     getJSONData(urlPROD).then(function (resultObj) {
@@ -155,8 +157,35 @@ function showProductInfo() {
   
       // Redirige a la página del carrito
       window.location.href = "cart.html";
-    });
-  }
+
+         //sube los datos a la base de datos
+         console.log('item:', product);
+
+         // Realizar la solicitud POST al servidor backend
+         fetch('http://localhost:3000/cart', {
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json',
+                 'Authorization': `Bearer ${token}`
+             },
+             body: JSON.stringify(product),
+             mode: 'cors',
+         })
+             .then(response => {
+                 // Verifica si la respuesta está en el rango de códigos de estado exitosos
+                 if (!response.ok) {
+                     throw new Error('La solicitud no fue exitosa: ' + response.status);
+                 }
+                 return response.json(); // Devuelve la promesa para el siguiente .then
+             })
+             .then(data => {
+                 console.log('Artículo agregado al carrito correctamente:', data);
+             })
+             .catch(error => {
+                 console.error('Error al agregar el artículo al carrito:', error);
+             });
+     });
+ }
   
     // Muestra el carrusel de imágenes del producto actual
     function showImagesHtml() {

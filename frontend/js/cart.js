@@ -1,5 +1,6 @@
 const USER_ID = 25801;
 const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
+const token = localStorage.getItem('token');
 
 const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
@@ -18,6 +19,17 @@ if (!peugeot208) {
   };
 
   carrito.push(product);
+
+  fetch('http://localhost:3000/cart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(product),
+    mode: 'cors',
+  });
+
 
   // Actualiza el carrito en el Local Storage
   localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -82,6 +94,28 @@ function displayCart(cartData) {
   eliminarBotones.forEach(boton => {
     boton.addEventListener('click', function() {
       eliminarProducto(this);
+      const prodId = this.getAttribute('data-product-id');
+
+      fetch(`http://localhost:3000/cart/${prodId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        mode: 'cors',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('elemento eliminada correctamente:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     });
   });
 }
@@ -116,8 +150,32 @@ function recalcular() {
       cantidadValue = 1;
     }
     resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
+
+    // Obtén el id del producto específico en el índice actual
+    const prodId = document.querySelectorAll('.eliminar-articulo')[i].getAttribute('data-product-id');
+
+    // Actualiza la cantidad en el servidor utilizando el método PUT
+    fetch(`http://localhost:3000/cart/${prodId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      mode: 'cors',
+      body: JSON.stringify({ count: cantidadValue }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Cantidad actualizada correctamente:', data);
+      });
   }
 }
+
 
 // funcion que calcula el subtotal final sumando el precio de todos los articulos en el carrito
 function calcularSubTotalFinal() {
