@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 
 const app = express();
-const port = 5500;
+const port = 3000;
 
 const secretKey = 'chicheKey';
 
@@ -14,11 +14,6 @@ app.use(express.json())
 
 app.use(cors());
 
-/* app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-}); */
 
 app.use(express.static('emercado-api-main'));
 app.use(express.static('frontend'));
@@ -35,11 +30,37 @@ app.post('/login', (req, res) => {
   }
 });
 
-app.get('/prueba', (req,res) => {
-  res.send('esto es una mierda')
+
+// Definir el middleware de autenticación
+function verificarToken(req, res, next) {
+  const token = req.headers.authorization; // Se asume que el token se envía en el encabezado de autorización
+
+  if (token) {
+    // Verificar el token utilizando la clave secreta
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ mensaje: 'Token inválido' });
+      } else {
+        // Si el token es válido, se permite que la solicitud continúe
+        req.usuario = decoded.usuario; // Almacenar el usuario en el objeto de solicitud para su uso posterior
+        next();
+      }
+    });
+  } else {
+    res.status(401).json({ mensaje: 'Token no proporcionado' });
+  }
+}
+
+// Middleware para proteger la ruta /cart
+app.get('/cart', verificarToken, (req, res) => {
+  // Esta función se ejecutará solamente si el token es válido
+  // Aquí puedes colocar la lógica para la ruta /cart
 });
+
+  
+
+
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
   });
-  

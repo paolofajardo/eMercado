@@ -40,6 +40,7 @@ let getJSONData = function (url) {
     });
 }
 
+/*
 function verificarAutenticacion() {
   // Verifica si el usuario está logeado
   if (!localStorage.getItem("usuario") && !sessionStorage.getItem("usuario")) {
@@ -47,7 +48,7 @@ function verificarAutenticacion() {
     window.location.href = "login.html";
   }
 }
-
+*/
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -96,8 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }).then((result) => {
         if (result.isConfirmed) {
         // En caso de confirmar el cierre de sesión se borran los datos de local/session storage y redirige al login
-          localStorage.removeItem('usuario') || sessionStorage.removeItem('usuario');
-          location.href = 'login.html';
+        location.href = 'login.html';
         }
       });
     };

@@ -1,0 +1,89 @@
+html, body {
+    height: 100%;
+    margin:0;
+    padding:0;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  .container {
+    flex: 1;
+    margin:0 auto;
+    height: 80%;
+  }
+    .navbar {
+    display: flex;
+    justify-content: center;
+    padding: 5vh;
+  }
+  h6, h3{
+    padding-bottom: 10px;
+    }
+  .d-flex p{
+    width: 60%;
+  }
+  h6, h3{
+    font-family: 'Verdana', serif !important;
+  }
+  .right-section{
+    padding:2.5rem;
+    padding-top:0;
+    padding-right: 3.75rem;
+    font-size: 14px;
+    margin-top:0;
+    
+    }
+  .left-section{
+    border-right: 1px solid #CCCCCC;
+    padding:2.5rem;
+    padding-top:0;
+    padding-right: 3.75rem;
+    font-size: 14px;
+    margin-top:0;
+  }
+  section{
+    height: 60vh;
+  }
+  .form-group {
+  position: relative;
+  margin-top:20px
+  }
+.placeholder-label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: 0.3s;
+  padding: 0 5px;
+}
+.form-control:focus + .placeholder-label,
+.form-control:not(:placeholder-shown) + .placeholder-label {
+  top: -10px;
+  font-size: 15px;
+  color:black;
+  }
+  .form-input{
+    padding:10px 0;
+  }
+  .btn{
+    background-color: orange;
+    border:none;
+    color:white;
+  }
+  @media (max-width: 767px) {
+  .centrado  {
+    text-align: center; 
+    }
+  .form-input{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .form-input .centrar{
+    min-width: 100%;
+  }
+}

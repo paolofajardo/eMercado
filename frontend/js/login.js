@@ -5,36 +5,55 @@ let registerBtn = document.getElementById('RegisterBtn');
 let loginBtn = document.getElementById('loginBtn');
 
 // Evento para el botón de registro
-registerBtn.addEventListener('click', () => {
+registerBtn.addEventListener('click', async () => {
+    let usuario = {
+        profile: document.getElementById('register-name').value,
+        email: document.getElementById('register-mail').value,
+        pass: document.getElementById('register-password').value
+    };
 
-    let usuario = {};
+    if (usuario.email !== '' && usuario.pass !== '' && usuario.profile !== '') {
+        try {
+            const response = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ usuario })
+            });
 
-    // Se asignan los valores de cada elemento del registro al objeto usuario
-    usuario.profilename = document.getElementById('register-name').value;
-    usuario.email = document.getElementById('register-mail').value;
-    usuario.pass = document.getElementById('register-password').value;
-
-    let checkbox = document.getElementById('checkbox'); // Se obtiene checkbox "Recordar usuario"
-
-    // Verifica si todos los campos requeridos están llenos
-    if (usuario.email !== '' && usuario.pass !== '' && usuario.profilename !== '') {
-        // Se muestra mensaje de éxito en caso de que esten completados los campos
-        Swal.fire({
-            icon: 'success',
-            title: 'Registro exitoso',
-            text: 'Espera mientras cargamos tus datos.'
-        });
-
-        // Redirige a index.html después de un retraso
-        setTimeout(() => {
-            location.href = 'index.html';
-        }, 2000);
-
-        // Se almacena la información del usuario en localStorage o sessionStorage según el estado de la casilla de verificación
-        if (checkbox.checked) {
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-        } else {
-            sessionStorage.setItem('usuario', JSON.stringify(usuario));
+            if (response.ok) {
+                const data = await response.json();
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    // Muestra una alerta de registro exitoso
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registro exitoso',
+                        text: 'Espera mientras cargamos tus datos.'
+                    });
+                    if (checkbox.checked) {
+                        localStorage.setItem('usuario', JSON.stringify(usuario));
+                    } else {
+                        sessionStorage.setItem('usuario', JSON.stringify(usuario));
+                    }
+                    // Redirige a index.html después de un retraso
+                    setTimeout(() => {
+                        location.href = 'index.html';
+                    }, 2000);
+                } else {
+                    // Muestra un mensaje de error si no se recibe el token
+                    Swal.fire("Error!", "El token no se recibió correctamente", "error");
+                }
+            } else {
+                const errorMensaje = await response.json();
+                // Muestra un mensaje de error del servidor
+                Swal.fire("Error!", errorMensaje.mensaje, "error");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            // Muestra un mensaje de error en caso de un fallo en la solicitud
+            Swal.fire("Error!", "Ocurrió un error al querer iniciar sesión", "error");
         }
     } else {
         // Muestra un mensaje de error si algún campo requerido está vacío
@@ -45,6 +64,7 @@ registerBtn.addEventListener('click', () => {
         });
     }
 });
+
 
 // Evento para la presentación del formulario de inicio de sesión
 document.getElementById('form-login').addEventListener('submit', (e) => {
