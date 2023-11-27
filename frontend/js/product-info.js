@@ -111,17 +111,19 @@ function showProductInfo() {
     
     // Construye el HTML para mostrar la información del producto
     htmlContentToAppend += `
-      <div><h4>${currentProd.name}</h4></div>
-      <div class="input-group mb-3 align-items-center">
-        <div class="price-fontstyle">${currentProd.currency}&nbsp;${currentProd.cost}</div>
-        <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;| +${currentProd.soldCount} vendidos</span>
-      </div>
-      <div class="fs-6 pt-1 pb-3">
-        <h6><strong>Descripción</strong></h6>${currentProd.description}
-      </div>
-      <div class="col-12">
-        <input type="button" value="Agregar Carrito" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
-      </div>
+    <div><h4>${currentProd.name}</h4></div>
+    <div class="input-group mb-3 align-items-center">
+      <div class="price-fontstyle"><i class="bi bi-cash-stack"></i>&nbsp;${currentProd.currency}&nbsp;${currentProd.cost}</div>
+      <span class="text-muted font-small pl-5">&nbsp;&nbsp;&nbsp;<i class="bi bi-award"></i> +${currentProd.soldCount} vendidos</span>
+    </div>
+    <div class="fs-6 pt-1 pb-3">
+      <h6><strong>Descripción</strong></h6><i class="bi bi-info-circle-fill"></i>&nbsp;${currentProd.description}
+    </div>
+    <div class="col-12">
+    <button type="button" id="agregar-carrito" class="btn btn-outline-dark btn-sm">
+    Agregar Carrito&nbsp;<i class="bi bi-bag-plus-fill"></i>
+    </button>
+    </div>
     `;
   
     document.getElementById("prod-info").innerHTML = htmlContentToAppend;
@@ -161,22 +163,22 @@ function showProductInfo() {
          //sube los datos a la base de datos
          console.log('item:', product);
 
-         // Realizar la solicitud POST al servidor backend
+         // Realizar la solicitud POST al servidor backend para agregar un producto
          fetch('http://localhost:3000/cart', {
              method: 'POST',
              headers: {
                  'Content-Type': 'application/json',
-                 'Authorization': `Bearer ${token}`
+                 'authorization': `Bearer ${token}`
              },
              body: JSON.stringify(product),
              mode: 'cors',
          })
              .then(response => {
-                 // Verifica si la respuesta está en el rango de códigos de estado exitosos
+        
                  if (!response.ok) {
                      throw new Error('La solicitud no fue exitosa: ' + response.status);
                  }
-                 return response.json(); // Devuelve la promesa para el siguiente .then
+                 return response.json(); 
              })
              .then(data => {
                  console.log('Artículo agregado al carrito correctamente:', data);

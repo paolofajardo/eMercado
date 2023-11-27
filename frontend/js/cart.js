@@ -1,7 +1,8 @@
 const USER_ID = 25801;
 const CART_URL = `${CART_INFO_URL}${USER_ID}${EXT_TYPE}`;
-const token = localStorage.getItem('token');
-console.log('hola');
+
+const token = localStorage.getItem('token'); // Se obtiene el token y se deja disponible para usarlo en las solicitudes
+
 const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
 // Comprueba si el carrito ya contiene el producto precargado
@@ -21,6 +22,7 @@ if (!peugeot208) {
   carrito.push(product);
 }
 
+// Solicitud al BackEnd para obtener el carrito
   fetch('http://localhost:3000/cart', {
   method: 'GET',
   headers: {
@@ -31,20 +33,18 @@ if (!peugeot208) {
   .then(response => {
     console.log(response.status);
    if (response.status === 401) {
-     // Si el servidor responde con un estado 401, redirige al usuario
-      window.location.href = '/frontend/login.html'; // Cambia esto por la URL de tu página de inicio de sesión
+     // Si el Token es inválido o no existe redirige al usuario al Login
+      window.location.href = '/frontend/login.html';
     } else {
-      return response.json(); // Procesa la respuesta normal si no es un 401
+      return response.json(); 
    }
   })
   .then(data => {
-   // Maneja los datos de la respuesta (si no es un 401)
    console.log(data);
   })
   .catch(error => {
    console.error('Hubo un error en la solicitud:', error);
   });
-
 
 
   // Actualiza el carrito en el Local Storage
@@ -105,18 +105,18 @@ function displayCart(cartData) {
   });
   
 
-  // Agrega de nuevo los manejadores de eventos para los botones de eliminar
+  // Funcionalidad del botón para eliminar articulos de la tabla
   const eliminarBotones = document.querySelectorAll('.eliminar-articulo');
   eliminarBotones.forEach(boton => {
     boton.addEventListener('click', function() {
       eliminarProducto(this);
       const prodId = this.getAttribute('data-product-id');
-
+    // Solicitud al BackEnd para eliminar un producto del carrito
       fetch(`http://localhost:3000/cart/${prodId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'authorization': `Bearer ${token}`
         },
         mode: 'cors',
       })
@@ -151,6 +151,7 @@ function eliminarProducto(botonEliminar) {
 
   // Actualiza la vista del carrito
   displayCart();
+  // Actualiza la columna del Subtotal
   recalcular();
 }
 
@@ -167,15 +168,15 @@ function recalcular() {
     }
     resultado[i].innerHTML = (cantidadValue * precioValue).toFixed(2);
 
-    // Obtén el id del producto específico en el índice actual
+    // Obtiene el id del producto específico en el índice actual
     const prodId = document.querySelectorAll('.eliminar-articulo')[i].getAttribute('data-product-id');
 
-    // Actualiza la cantidad en el servidor utilizando el método PUT
+    // Solicitud al BackEnd para actualizar la cantidad de artículos del carrito
     fetch(`http://localhost:3000/cart/${prodId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'authorization': `Bearer ${token}`
       },
       mode: 'cors',
       body: JSON.stringify({ count: cantidadValue }),
@@ -236,6 +237,7 @@ function precioFinal() {
   precioFinalElement.textContent = `USD ${total.toFixed(2)}`;
 }
 
+// Funcionalidad del Modal Forma de Pago
 const creditCardCheckbox = document.getElementById("creditCardRadio");
 const bankTransferCheckbox = document.getElementById("bankTransferRadio");
 const creditCardFields = document.getElementById("creditCardFields");
@@ -244,9 +246,9 @@ const saveButton = document.getElementById("saveButton");
 
 creditCardCheckbox.addEventListener("change", function () {
   if (creditCardCheckbox.checked) {
-    // Habilitar los campos de tarjeta de crédito
+    // Habilita los campos de tarjeta de crédito
     enablePaymentFields(creditCardFields);
-    // Deshabilitar los campos de transferencia bancaria
+    // Deshabilita los campos de transferencia bancaria
     disablePaymentFields(bankTransferFields);
   } else {
     // Si el checkbox no está marcado, deshabilitar los campos de tarjeta de crédito
@@ -254,20 +256,21 @@ creditCardCheckbox.addEventListener("change", function () {
   }
 });
 
-// Escuchar el evento 'change' del checkbox de transferencia bancaria
+// Escucha el evento 'change' del checkbox de transferencia bancaria
 bankTransferCheckbox.addEventListener("change", function () {
   // Si el checkbox está marcado
   if (bankTransferCheckbox.checked) {
-    // Habilitar los campos de transferencia bancaria
+    // Habilita los campos de transferencia bancaria
     enablePaymentFields(bankTransferFields);
-    // Deshabilitar los campos de tarjeta de crédito
+    // Deshabilita los campos de tarjeta de crédito
     disablePaymentFields(creditCardFields);
   } else {
-    // Si el checkbox no está marcado, deshabilitar los campos de transferencia bancaria
+    // Si el checkbox no está marcado, deshabilita los campos de transferencia bancaria
     disablePaymentFields(bankTransferFields);
   }
 });
 
+// Escucha al botón Guardar del Modal
 saveButton.addEventListener("click", function () {
   // Obtiene la opción de pago seleccionada
   const selectedOption = document.querySelector('input[name="paymentOption"]:checked');
@@ -288,19 +291,19 @@ saveButton.addEventListener("click", function () {
       const accountNumberInput = document.getElementById("accountNumber");
       const accountNumber = accountNumberInput.value;
 
-      // Validar si el número de cuenta está vacío
+      // Valida si el número de cuenta está vacío
       if (accountNumber.trim() === "") {
-        // Mostrar mensaje de error y detener el proceso
+        // Muestra mensaje de error y detiene el proceso
         accountNumberInput.setCustomValidity("Completa este campo");
         accountNumberInput.reportValidity();
         return;
       } else {
-        // Mostrar texto de transferencia bancaria seleccionada
+        // Muestra texto de transferencia bancaria seleccionada
         selectedPaymentText.textContent = "Transferencia Bancaria";
       }
     }
 
-    // Ocultar el modal de pago y eliminar el fondo de pantalla modal
+    // Oculta el modal de pago y elimina el fondo de pantalla modal
     document.getElementById("paymentModal").style.display = "none";
     document.querySelector(".modal-backdrop").remove();
 
@@ -321,7 +324,7 @@ saveButton.addEventListener("click", function () {
 
 // Función para habilitar campos de pago
 function enablePaymentFields(fieldGroup) {
-  // Iterar sobre los campos y remover el atributo 'disabled'
+  // Itera sobre los campos y remueve el atributo 'disabled'
   fieldGroup.querySelectorAll(".payment-field").forEach(function (field) {
     field.removeAttribute("disabled");
   });
@@ -329,21 +332,21 @@ function enablePaymentFields(fieldGroup) {
 
 // Función para deshabilitar campos de pago
 function disablePaymentFields(fieldGroup) {
-  // Itera sobre los campos y agregar el atributo 'disabled'
+  // Itera sobre los campos y agrega el atributo 'disabled'
   fieldGroup.querySelectorAll(".payment-field").forEach(function (field) {
     field.setAttribute("disabled", true);
   });
 }
 
-  // Obtén el elemento de entrada
+
+  // Formato Fecha Vencimiento de Tarjeta Crédito/Débito del Modal
   const expirationDateInput = document.getElementById("expirationDate");
 
-  // Agrega un event listener para el evento "input"
   expirationDateInput.addEventListener("input", function() {
     // Elimina cualquier carácter que no sea un dígito
     this.value = this.value.replace(/\D/g, "");
 
-    // Asegúrate de que no haya más de 4 caracteres
+    // Asegura que no haya más de 4 caracteres
     if (this.value.length > 4) {
       this.value = this.value.slice(0, 4);
     }
@@ -354,25 +357,25 @@ function disablePaymentFields(fieldGroup) {
     }
   });
 
-  // Agrega un event listener para el evento "change"
-  expirationDateInput.addEventListener("change", function() {
-    // Verifica si el campo tiene exactamente 4 caracteres
-    if (this.value.length !== 5) {
-      Swal.fire(
-        'Error',
-        'El campo debe tener 4 caracteres (MM/AA).',
-        'error'
-    );
-      this.value = "";
+  // Formato Código de Seguridad de Tarjeta Crédito/Débito del Modal
+  const securityCodeInput = document.getElementById('securityCode');
+
+  securityCodeInput.addEventListener('input', function() {
+    // Remueve cualquier carácter que no sea un dígito
+    this.value = this.value.replace(/\D/g, '');
+
+    // Limita la longitud a 3 dígitos
+    if (this.value.length > 3) {
+      this.value = this.value.slice(0, 3);
     }
   });
-
 
 
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
 setInterval(calcularSubTotalFinal, 100);
 
+// Validaciones de todo el Formulario del carrito
 document.addEventListener('DOMContentLoaded', function () {
   const checkoutForm = document.getElementById('checkoutForm');
 
