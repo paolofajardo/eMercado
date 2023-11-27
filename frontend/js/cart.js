@@ -357,19 +357,6 @@ function disablePaymentFields(fieldGroup) {
     }
   });
 
-  // Formato Código de Seguridad de Tarjeta Crédito/Débito del Modal
-  const securityCodeInput = document.getElementById('securityCode');
-
-  securityCodeInput.addEventListener('input', function() {
-    // Remueve cualquier carácter que no sea un dígito
-    this.value = this.value.replace(/\D/g, '');
-
-    // Limita la longitud a 3 dígitos
-    if (this.value.length > 3) {
-      this.value = this.value.slice(0, 3);
-    }
-  });
-
 
 setInterval(precioFinal, 100);
 setInterval(calcularEnvio, 100);
